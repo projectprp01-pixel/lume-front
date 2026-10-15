@@ -1,0 +1,275 @@
+/* Pre-Arrival Email — a mobile email mock. Capped at phone width and centered
+   on larger screens (it's a mobile-only design). Faithful to Figma 10:399. */
+@import './prestay.css';
+
+.email {
+  background: var(--surface-page);
+  min-height: 100dvh;
+  padding-bottom: var(--space-6);
+  max-width: 440px;
+  margin-inline: auto;
+}
+
+/* ---------- Mail client header ---------- */
+.email__head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5) 0;
+}
+.email__avatar {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-pill);
+  background: #d9d9d9;
+}
+.email__from {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 auto;
+  padding-top: var(--space-1);
+}
+.email__sender {
+  font-size: var(--subtitle-medium-size);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.email__to {
+  font-size: var(--body-size);
+  color: var(--text-primary);
+}
+.email__to span {
+  color: #959595;
+}
+.email__time {
+  flex: 0 0 auto;
+  padding-top: var(--space-1);
+  font-size: var(--body-size);
+  color: #959595;
+}
+.email__rule {
+  height: 0;
+  margin: var(--space-4) auto 0;
+  width: calc(100% - 2 * var(--space-5));
+  border: none;
+  border-top: 1px solid var(--border-default);
+}
+.email__rule--full {
+  margin-top: 0;
+}
+
+/* ---------- Body ---------- */
+.email__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-5) var(--space-5) 0;
+}
+.email__intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.email__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  text-align: center;
+}
+.email__eyebrow {
+  font-size: var(--body-size);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.email__title {
+  font-size: var(--h3-size);
+  line-height: var(--h3-line);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.email__stay {
+  font-size: var(--body-size);
+  color: var(--text-primary);
+}
+.email__hero {
+  width: 100%;
+  height: 217px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+.email__text {
+  font-size: var(--subtitle-medium-size);
+  line-height: var(--subtitle-medium-line);
+  color: var(--text-primary);
+}
+
+.email__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.email__block-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.email__subhead {
+  font-size: var(--subtitle-medium-size);
+  line-height: var(--subtitle-medium-line);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.email__muted {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-secondary);
+}
+
+/* ---------- Reserve experiences ---------- */
+.email__exp-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-5);
+}
+.email-exp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.email-exp__media {
+  aspect-ratio: 1 / 1;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.email-exp__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.email-exp__title {
+  font-size: var(--body-size);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.email-exp__subtitle {
+  font-size: var(--caption-size);
+  line-height: var(--caption-line);
+  color: var(--text-secondary);
+}
+.email__link {
+  align-self: center;
+  font-size: var(--caption-size);
+  color: #0088ff;
+  text-decoration: underline;
+}
+
+/* ---------- Loyalty banner ---------- */
+.email-loyalty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--accent-default);
+}
+.email-loyalty__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.email-loyalty__title {
+  font-size: var(--subtitle-display-size);
+  line-height: 1.44;
+  font-weight: 500;
+  color: var(--text-on-inverse);
+}
+.email-loyalty__sub {
+  font-size: var(--caption-size);
+  color: var(--text-on-media-muted);
+}
+.email-loyalty__media {
+  flex: 0 0 auto;
+  width: 156px;
+  height: 82px;
+  border-radius: 4px;
+  background-size: cover;
+  background-position: center;
+}
+
+/* ---------- Preferences ---------- */
+.email__pref-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+.email-pref {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: 4px;
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  font-size: var(--body-size);
+  text-align: center;
+}
+.email-pref__icon {
+  width: 36px;
+  height: 36px;
+}
+
+/* ---------- WhatsApp banner ---------- */
+.email-whatsapp {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: 4px;
+  background: #f4fff5;
+  border: 1px solid #c3e7c9;
+}
+.email-whatsapp__icon {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+}
+.email-whatsapp__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  color: #005240;
+}
+.email-whatsapp__title {
+  font-size: var(--body-size);
+  font-weight: 500;
+}
+.email-whatsapp__sub {
+  font-size: var(--caption-size);
+  line-height: var(--caption-line);
+}
+
+/* ---------- Footer ---------- */
+.email__footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.email__footer-logo {
+  width: 43px;
+  height: 43px;
+  border-radius: 4px;
+  background: #d9d9d9;
+}
+.email__address {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-primary);
+}

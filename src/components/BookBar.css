@@ -1,0 +1,90 @@
+/* Shared booking bar (Figma: surface/card, 16px padding, Total 18/26 semibold, 40px pill buttons) */
+.bk-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 16px 24px;
+  background: var(--surface-card);
+  border-top: 1px solid var(--border-default);
+}
+.bk-bar__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.bk-bar__actions {
+  display: flex;
+  gap: 12px;
+}
+.bk-btn {
+  flex: 1;
+  height: 40px;
+  padding: 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--body-size);
+  line-height: 20px;
+  font-weight: 400;
+  text-align: center;
+}
+.bk-btn--outline {
+  border: 1px solid var(--text-primary);
+  background: transparent;
+  color: var(--text-primary);
+}
+.bk-btn--primary {
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+}
+.bk-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+/* confirmation state (replaces the bar's content) */
+.bk-done {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+.bk-done__title {
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.bk-done__sub {
+  margin-bottom: 12px;
+  font-size: var(--body-size);
+  color: var(--text-secondary);
+}
+/* "n items in your cart · View" */
+.bk-bar__cartlink {
+  align-self: flex-start;
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--link-brown);
+  text-decoration: underline;
+}
+
+/* Laptop (Figma web booking bar): one row — Total (label over amount) on the left, buttons on the right */
+@media (min-width: 1024px) {
+  .bk-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px calc(var(--page-pad) - 14px);
+  }
+  .bk-bar__total { order: 0; flex-direction: column; align-items: flex-start; gap: 0; font-weight: 400; }
+  .bk-bar__total span:last-child { font-size: 20px; line-height: 28px; font-weight: 600; }
+  .bk-bar__cartlink { order: 1; align-self: center; margin-left: var(--space-5); }
+  .bk-bar__actions { order: 2; margin-left: auto; }
+  .bk-bar .bk-btn { flex: none; padding-inline: var(--space-6); }
+  .bk-bar > .bk-done { flex: 1; }
+}

@@ -1,0 +1,119 @@
+.spa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-bottom: var(--space-6);
+}
+.spa-status { padding: 0 var(--space-4); color: var(--text-secondary); font-size: var(--body-size); }
+
+/* Hero — inset rounded card (Figma 1472:5196) */
+.spa-hero {
+  position: relative;
+  min-height: 341px;
+  margin: -60px var(--space-3) 0; /* runs up behind the translucent top bar (as on Dining / Transport) */
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--surface-media-deep);
+  display: flex;
+  align-items: flex-end;
+}
+.spa-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(30, 14, 6, 0.8) 0%, rgba(30, 14, 6, 0) 55%);
+}
+.spa__back {
+  position: absolute;
+  top: 72px;
+  left: var(--space-2);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+}
+.spa__back img { width: 22px; height: 22px; filter: brightness(0) invert(1); }
+.spa-hero__text { position: relative; padding: var(--space-5) var(--space-4); }
+.spa-hero__title { font-size: var(--h1-size); line-height: var(--h1-line); color: var(--text-on-inverse); }
+.spa-hero__sub {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+  font-size: var(--body-size);
+  color: var(--text-grey-secondary-on-media);
+}
+
+/* Category tabs — underlined text, active is bold with a dark underline */
+.spa-tabs {
+  display: flex;
+  gap: var(--space-5);
+  margin-inline: var(--space-4);
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--border-default);
+}
+.spa-tabs::-webkit-scrollbar { display: none; }
+.spa-tab {
+  flex: 0 0 auto;
+  padding: var(--space-2) 0;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  font-size: var(--subtitle-medium-size);
+  color: var(--text-secondary);
+}
+.spa-tab--active { color: var(--text-primary); font-weight: 600; border-bottom-color: var(--text-primary); }
+
+/* Treatment cards — text only */
+.spa-list { display: flex; flex-direction: column; gap: var(--space-3); padding: 0 var(--space-4); }
+.spa-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-card-extra-light);
+  cursor: pointer;
+}
+.spa-card__title { font-size: var(--subtitle-display-size); line-height: var(--subtitle-display-line); font-weight: 500; color: var(--text-primary); }
+.spa-card__desc {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.spa-card__meta { display: flex; align-items: center; gap: var(--space-2); font-size: var(--body-size); color: var(--text-secondary); }
+.spa-card__meta-item { display: inline-flex; align-items: center; gap: var(--space-1); }
+.spa-card__meta-item img { width: 18px; height: 18px; }
+.spa-card__meta .dot { width: 5px; height: 5px; }
+
+@media (min-width: 1024px) {
+  /* Figma web (3054:18048): full 1280 frame — banner inset by the 70px page margin and flush under the
+     link bar; photo strip, tabs and the 3-column treatment grid line up 8px inside it. Treatment cards
+     stay text-only (spa treatments have no photos). */
+  .spa { width: 100%; max-width: 1280px; margin-inline: auto; }
+  .spa-hero { margin: 0 var(--page-pad); border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
+  .spa__back { top: var(--space-4); left: var(--space-5); }
+  .spa-hero__text { padding-inline: 28px; }
+  .spa-status { padding-inline: calc(var(--page-pad) + var(--space-2)); }
+  .spa-tabs {
+    align-self: flex-start;
+    margin-inline: calc(var(--page-pad) + var(--space-2)) 0;
+    padding-inline: var(--space-2);
+  }
+  .spa-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding-inline: calc(var(--page-pad) + var(--space-2));
+  }
+}

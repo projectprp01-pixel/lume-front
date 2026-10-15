@@ -1,0 +1,373 @@
+/* Dining screen — mobile: stacked with horizontal card rows; laptop: wide
+   hero band + card grids. Faithful to Figma 397:5841 (mobile) and
+   3132:20458 (web). In-room hero and the Intimate band are full-bleed. */
+.dining-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding-block: var(--space-3) var(--space-6);
+  background: var(--surface-card-extra-light);
+  /* height now comes from .screen-shell (footer sits outside this <main>) */
+}
+/* non-bleed blocks get side padding; full-bleed bands do not */
+.dining-screen > .screen-title {
+  padding-inline: var(--space-4);
+}
+
+/* Mobile (Figma 519:1010): no title row — the 369x414 hero runs up behind the
+   translucent sticky top bar (60px tall) instead of starting below it. */
+@media (max-width: 1023px) {
+  main.dining-screen {
+    padding-top: 0;
+  }
+  .dining-screen > .screen-title {
+    display: none;
+  }
+  .dining-screen > .dining-hero {
+    margin-top: -60px;
+    aspect-ratio: 369 / 414;
+  }
+}
+
+/* ---------- In-room dining hero ---------- */
+.dining-hero {
+  position: relative;
+  margin-inline: var(--space-3);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 369 / 260;
+  background-color: var(--surface-media-deep);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+}
+.dining-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #000 4%, rgba(0, 0, 0, 0) 64%);
+}
+.dining-hero__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-4);
+  width: 100%;
+}
+.dining-hero__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+/* Figma 519:1015: eyebrow / subtitle = Inter Regular 14/20, no tracking, grey-secondary-on-media */
+.dining-hero__eyebrow {
+  font-size: var(--body-size);
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--text-grey-secondary-on-media);
+}
+.dining-hero__title {
+  font-size: 1.75rem; /* Figma H2 28/32 */
+  line-height: 2rem;
+  font-weight: 400;
+  color: var(--text-on-inverse);
+  max-width: 22ch; /* Figma wraps "Breakfast in bed, / Dinner by the window" on two lines */
+}
+.dining-hero__cta {
+  align-self: flex-start;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid rgba(255, 254, 249, 0.55);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-on-inverse);
+  font-size: var(--body-size);
+}
+
+/* ---------- Section heading ---------- */
+.dining-section {
+  padding-inline: var(--space-4);
+}
+.dining-section__title,
+.dining-band__title {
+  font-size: var(--h3-size);
+  line-height: var(--h3-line);
+  font-weight: 400;
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+}
+
+/* ---------- Card rows (horizontal scroll on mobile) ---------- */
+.dining-row {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: var(--space-1);
+}
+.dining-row::-webkit-scrollbar {
+  display: none;
+}
+
+/* Outdoor (light) cards */
+.rest-card {
+  flex: 0 0 auto;
+  width: min(320px, 84vw);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-card-extra-light);
+}
+.rest-card__media {
+  aspect-ratio: 320 / 180;
+}
+.rest-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.rest-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-5);
+}
+.rest-card__name {
+  font-size: var(--subtitle-display-size);
+  line-height: var(--subtitle-display-line);
+  font-weight: 400;
+  color: var(--text-primary);
+}
+.rest-card__meta {
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-grey-secondary);
+}
+
+/* ---------- Intimate dining — dark full-bleed band (Figma 409:6974) ---------- */
+.dining-band {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  /* torn / burnt top and bottom edge (Figma shows the page through a ragged 3-4px rim) */
+  mask-image: linear-gradient(#000 0 0), url(../../assets/bands/band-torn-edge.png),
+    url(../../assets/bands/band-torn-edge.png);
+  mask-size: 100% calc(100% - 8px), 256px 4px, 256px 4px;
+  mask-position: 0 4px, 0 0, 0 100%;
+  mask-repeat: no-repeat, repeat-x, repeat-x;
+  -webkit-mask-image: linear-gradient(#000 0 0), url(../../assets/bands/band-torn-edge.png),
+    url(../../assets/bands/band-torn-edge.png);
+  -webkit-mask-size: 100% calc(100% - 8px), 256px 4px, 256px 4px;
+  -webkit-mask-position: 0 4px, 0 0, 0 100%;
+  -webkit-mask-repeat: no-repeat, repeat-x, repeat-x;
+  background: #211007; /* #291409 under a 20% black overlay */
+  padding-block: 30px 36px;
+}
+/* soft glow top-left (Figma "Ellipse 25") */
+.dining-band::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: -537px;
+  top: -666px;
+  width: 991px;
+  height: 991px;
+  background: url(../../assets/bands/band-glow.svg) center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+/* paper texture, rotated 180deg, centred and bleeding off the top (Figma "image 13") */
+.dining-band::before {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  left: 50%;
+  top: -140px;
+  width: max(100%, 419px);
+  aspect-ratio: 419 / 629;
+  transform: translateX(-50%) rotate(180deg);
+  /* Figma blends this layer with Linear Burn (base - (255 - texture), per channel).
+     CSS has no such blend, so the result is pre-baked against the band colour. */
+  background: url(../../assets/bands/band-burn-dining.jpg) center / cover;
+  pointer-events: none;
+}
+.dining-band__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-inline: var(--space-4);
+}
+.dining-band__head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dining-band__title {
+  font-style: italic; /* Jazmin Medium Italic */
+  font-weight: 500;
+  color: var(--text-on-inverse);
+  margin-bottom: 0;
+}
+.dining-band__subtitle {
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-grey-secondary);
+  max-width: 46ch;
+}
+.dining-band .dining-row {
+  gap: 12px;
+}
+
+/* Intimate (dark) cards: 340 wide, 244 media, #3f2929 body */
+.dine-card {
+  flex: 0 0 auto;
+  width: min(340px, 87vw);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-media-deep);
+}
+.dine-card__media {
+  aspect-ratio: 340 / 244;
+}
+.dine-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dine-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 20px;
+}
+.dine-card__name {
+  font-size: var(--subtitle-display-size);
+  line-height: var(--subtitle-display-line);
+  font-weight: 500;
+  color: var(--text-on-inverse);
+}
+.dine-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-on-media-muted);
+}
+/* price line: plain price, or struck-through list price + offer price + "x% off" tag (wraps, never clipped) */
+.dine-card__price {
+  min-width: 0;
+}
+.dine-card__price .price-text {
+  gap: 2px 8px;
+  align-items: baseline;
+}
+.dine-card__price .price-text__was {
+  opacity: 0.7;
+}
+.dine-card__price .price-text__amt {
+  color: var(--text-on-inverse);
+}
+.dine-card__price .price-text__tag {
+  background: rgba(232, 243, 230, 0.16);
+  color: #b9e0b3;
+}
+
+/* ---------- Dot separator ---------- */
+.dining-dot {
+  flex: 0 0 auto;
+  width: 4px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--text-grey-secondary);
+}
+.dining-dot--muted {
+  width: 5px;
+  height: 5px;
+  background: var(--text-on-media-muted);
+}
+
+/* ======================================================================
+   LAPTOP (>=1024px) — full-bleed hero + band; capped inner columns.
+   ====================================================================== */
+@media (min-width: 1024px) {
+  .dining-screen {
+    gap: var(--space-7);
+    padding-block: 0 var(--space-7);
+  }
+  /* Figma 3132:20458: no title row — the hero sits directly under the nav */
+  .dining-screen > .screen-title {
+    display: none;
+  }
+
+  /* Hero — inset rounded banner, text bottom-left (Figma 70px side inset) */
+  .dining-hero {
+    margin-inline: max(var(--space-4), calc((100% - 1139px) / 2));
+    border-radius: 0 0 var(--radius-xl, 24px) var(--radius-xl, 24px);
+    aspect-ratio: 1139 / 340;
+  }
+  .dining-hero__content {
+    padding-inline: var(--space-6);
+  }
+  .dining-hero__title {
+    font-size: 1.75rem;
+  }
+
+  /* Outdoor — capped column, 2-up grid, no scroll */
+  .dining-section {
+    max-width: 1139px;
+    margin-inline: auto;
+    width: 100%;
+    padding-inline: var(--gutter);
+  }
+  .dining-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    overflow: visible;
+  }
+  .rest-card {
+    width: auto;
+  }
+  .rest-card__media {
+    aspect-ratio: 560 / 220;
+  }
+
+  /* Intimate band — full-bleed, capped inner, 4-up grid */
+  .dining-band {
+    padding-block: var(--space-6);
+  }
+  .dining-band__inner {
+    max-width: 1139px;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .dining-row--dark {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .dine-card {
+    width: auto;
+  }
+}
+
+/* Inline fallback notice when the F&B list can't be fetched. */
+.dining-status {
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-muted, #8a8275);
+  font-size: 0.85rem;
+}
+
+/* intimate cards that open the detail/booking page */
+.dine-card--link {
+  cursor: pointer;
+}
+
+.rest-card--link {
+  cursor: pointer;
+}
+
+.dining-section__subtitle {
+  margin: 0;
+  opacity: 0.75;
+}
+

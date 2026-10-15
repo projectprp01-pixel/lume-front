@@ -1,0 +1,115 @@
+/* "View Menu" popup — Figma 4075:7945 / 4075:8131 (361px card on a 50% scrim). */
+.menuviewer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgba(0, 0, 0, 0.5);
+}
+.menuviewer__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: min(361px, 100%);
+  max-height: 90dvh;
+  padding: var(--space-4);
+  background: var(--surface-card);
+  border-radius: var(--radius-sm);
+}
+.menuviewer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.menuviewer__title {
+  font-size: var(--h3-size);
+  line-height: 32px;
+  font-weight: 500;
+  color: #271919;
+}
+.menuviewer__close {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+.menuviewer__close img {
+  width: 100%;
+  height: 100%;
+}
+.menuviewer__tabs {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--border-default);
+}
+.menuviewer__tabs::-webkit-scrollbar {
+  display: none;
+}
+.menuviewer__tab {
+  flex: none;
+  padding: 4px var(--space-4);
+  font-size: var(--body-size);
+  line-height: 20px;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  border-bottom: 1px solid transparent;
+  margin-bottom: -1px;
+}
+.menuviewer__tab--on {
+  font-weight: 600;
+  color: var(--surface-inverse-deep);
+  border-bottom-color: var(--button-primary-bg);
+}
+.menuviewer__page {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  border-radius: 4px;
+  background: #2b2b2b;
+}
+.menuviewer__page img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.menuviewer__pdf {
+  display: block;
+  width: 100%;
+  height: min(70dvh, 640px);
+  border: 0;
+  background: #fff;
+}
+.menuviewer__open {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  text-align: center;
+  font-size: var(--body-size);
+  color: var(--text-on-inverse);
+  text-decoration: underline;
+}
+.menuviewer__pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.menuviewer__arrow {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: #776060;
+  background: var(--border-default);
+  border-radius: var(--radius-pill);
+}
+.menuviewer__arrow:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.menuviewer__count {
+  font-size: var(--subtitle-medium-size);
+  line-height: 22px;
+  color: var(--text-secondary);
+}

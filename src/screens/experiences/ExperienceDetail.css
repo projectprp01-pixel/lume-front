@@ -1,0 +1,271 @@
+.xd {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-page);
+  flex: 1 0 auto; /* fills the page shell under the top bar */
+}
+.xd--status {
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  color: var(--text-secondary);
+}
+
+/* ---- Hero ---- */
+.xd-hero {
+  position: relative;
+  min-height: 341px;
+  margin: -60px var(--space-3) 0; /* runs up behind the translucent top bar (Figma) */
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+}
+.xd-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(30, 14, 6, 0.8) 0%, rgba(30, 14, 6, 0) 55%);
+}
+.xd__back {
+  position: absolute;
+  top: 72px;
+  left: var(--space-4);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+}
+.xd__back img { width: 22px; height: 22px; filter: brightness(0) invert(1); }
+.xd__back--inline { position: static; background: var(--surface-card); }
+.xd__back--inline img { filter: none; }
+.xd-hero__text {
+  position: relative;
+  padding: var(--space-5) var(--space-4);
+}
+.xd-hero__title {
+  font-size: var(--h1-size);
+  line-height: var(--h1-line);
+  color: var(--text-on-inverse);
+}
+.xd-hero__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+  font-size: var(--body-size);
+  color: var(--text-grey-secondary-on-media);
+}
+.xd-hero__meta-item { display: inline-flex; align-items: center; gap: var(--space-1); }
+.xd-hero__meta-item img { width: 18px; height: 18px; filter: brightness(0) invert(0.85); }
+
+/* ---- Gallery thumbs ---- */
+.xd-gallery {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4) 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.xd-gallery::-webkit-scrollbar { display: none; }
+.xd-gallery__thumb {
+  flex: 0 0 auto;
+  width: 72px;
+  height: 56px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.xd-gallery__thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---- Body ---- */
+.xd-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-4);
+}
+.xd-price { color: var(--text-secondary); font-size: var(--body-size); }
+/* Figma: large display-font amount with a small grey unit */
+.xd-price__amt { font-family: var(--font-display); font-size: 2rem; line-height: 1.1; color: var(--text-primary); }
+.xd-price__unit { font-size: var(--body-size); color: var(--text-secondary); }
+.xd-desc {
+  font-size: var(--body-size);
+  color: var(--text-primary);
+  line-height: var(--body-line);
+  margin-top: calc(var(--space-4) * -1);
+}
+/* keep the paragraph breaks the property typed in the dashboard */
+.xd-desc p { white-space: pre-line; }
+.xd-desc--clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.xd-seemore {
+  margin-top: var(--space-1);
+  color: var(--link-brown);
+  font-size: var(--body-size);
+}
+
+.xd-section__title {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+/* ---- What's included — green success tags (same as Transport / Spa) ---- */
+.xd-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.xd-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: #eff2ef;
+  border: 1px solid #d0e2cc;
+  color: #256339;
+  font-size: var(--caption-size);
+  line-height: 16px;
+}
+
+/* ---- Day picker (74 x 68, tan when picked — Figma) ---- */
+.xd-days { display: flex; gap: var(--space-2); overflow-x: auto; scrollbar-width: none; }
+.xd-days::-webkit-scrollbar { display: none; }
+.xd-day {
+  flex: 0 0 74px;
+  height: 68px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px;
+  text-align: center;
+  background: transparent;
+  border: 1px solid var(--border-default);
+  border-radius: 4px;
+  color: var(--text-primary);
+}
+.xd-day__dow { font-size: var(--body-size); line-height: 20px; color: var(--text-secondary); }
+.xd-day__dom { font-size: var(--subtitle-medium-size); line-height: 22px; font-weight: 600; }
+.xd-day--active { background: var(--surface-card-light-2); border-color: var(--link-brown); }
+
+/* ---- Time slots (2 per row) ---- */
+.xd-slots { display: flex; flex-wrap: wrap; gap: 8px; }
+.xd-slot {
+  flex: 1 1 calc(50% - 4px);
+  max-width: 176px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  padding: 12px 16px;
+  text-align: left;
+  background: var(--surface-card-extra-light);
+  border: 1px solid var(--border-default);
+  border-radius: 4px;
+}
+.xd-slot__label { font-size: var(--body-size); line-height: 20px; color: var(--text-secondary); }
+.xd-slot__time { font-size: var(--body-size); line-height: 20px; font-weight: 500; color: var(--text-primary); }
+.xd-slot__avail { font-size: var(--body-size); line-height: 20px; color: var(--text-secondary); }
+.xd-slot--active { background: var(--surface-card-light-2); border-color: var(--link-brown); }
+.xd-slot--full { opacity: 0.5; cursor: not-allowed; }
+
+/* ---- Guests stepper (pill: − 1 +) ---- */
+.xd-guests { display: flex; flex-direction: row; align-items: center; justify-content: space-between; }
+.xd-guests .xd-section__title { margin-bottom: 0; }
+.xd-stepper {
+  display: grid;
+  grid-template-columns: 35px 1fr 35px;
+  align-items: center;
+  width: 110px;
+  height: 32px;
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+  background: var(--surface-card-extra-light);
+}
+.xd-stepper button {
+  width: 35px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  background: var(--surface-page);
+  font-size: 1.125rem;
+  line-height: 1;
+  color: var(--text-primary);
+}
+.xd-stepper button:first-child { border-right: 1px solid var(--border-default); }
+.xd-stepper button:last-child { border-left: 1px solid var(--border-default); }
+.xd-stepper span { text-align: center; font-size: var(--body-size); color: var(--text-primary); }
+.xd-guests__fixed { margin: 0; font-size: var(--body-size); color: var(--text-primary); }
+
+/* ---- Add-ons (tan card with a square tick box when picked) ---- */
+.xd-addons { display: flex; flex-direction: column; gap: 12px; }
+.xd-addon {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px 20px 20px;
+  text-align: left;
+  background: var(--surface-card-extra-light);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.xd-addon--on { background: var(--surface-card-light-2); border-color: var(--link-brown); }
+.xd-addon__head { display: flex; align-items: center; gap: 8px; }
+.xd-check {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 23px;
+  height: 23px;
+  box-sizing: border-box;
+  background: var(--surface-card);
+  border: 1.44px solid var(--border-default);
+  border-radius: 2px;
+  color: var(--text-primary);
+}
+.xd-check--on { background: transparent; border-color: var(--link-brown); }
+.xd-addon__name { font-size: var(--subtitle-medium-size); line-height: 22px; font-weight: 500; color: var(--text-primary); }
+.xd-addon__desc { font-size: var(--body-size); line-height: 20px; color: var(--text-secondary); }
+.xd-addon__price { margin-top: 4px; font-size: var(--subtitle-medium-size); line-height: 22px; color: var(--text-primary); }
+
+.xd-error { color: #b4473b; font-size: var(--body-size); }
+
+/* ---- Sticky footer: shared <BookBar> ---- */
+.xd .bk-bar { margin-top: auto; }
+
+@media (min-width: 1024px) {
+  /* Figma web (3053:17621): full 1280 frame, banner inset by the 70px page margin, flush under the
+     link bar with only its bottom corners rounded; text columns line up 8px inside the banner. */
+  .xd { width: 100%; max-width: 1280px; margin-inline: auto; }
+  .xd-hero { margin: 0 var(--page-pad); border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
+  .xd__back { top: var(--space-4); left: var(--space-5); }
+  .xd-hero__text { padding-inline: var(--space-5); }
+  .xd-gallery,
+  .xd-body { padding-inline: calc(var(--page-pad) + var(--space-2)); }
+  .xd-body { max-width: none; }
+  /* stepper sits under its heading and add-ons are cards in a row, as in the web frame */
+  .xd-guests { flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+  .xd-addons { flex-direction: row; flex-wrap: wrap; align-items: stretch; }
+  .xd-addon { flex: 0 1 366px; }
+}
+
+.xd-day--blocked { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; }
+.xd-day:disabled { cursor: not-allowed; }
+
+.xd-hero__meta-item .dot { width: 5px; height: 5px; filter: none; }
+
+.xd-note { color: #256339; font-size: var(--body-size); line-height: 20px; }

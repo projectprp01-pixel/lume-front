@@ -1,0 +1,147 @@
+.th {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-bottom: var(--space-6);
+}
+.th-status { padding: 0 var(--space-4); color: var(--text-secondary); font-size: var(--body-size); }
+
+/* Hero — inset rounded card (Figma 1822:9930) */
+.th-hero {
+  position: relative;
+  min-height: 280px;
+  margin: var(--space-3) var(--space-3) 0;
+  border-radius: var(--radius-xl, 24px);
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--surface-media-deep);
+  display: flex;
+  align-items: flex-end;
+}
+.th-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(30, 14, 6, 0.85) 0%, rgba(30, 14, 6, 0) 55%);
+}
+.th__back {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+}
+.th__back img { width: 22px; height: 22px; filter: brightness(0) invert(1); }
+.th-hero__text { position: relative; padding: var(--space-5) var(--space-4); }
+.th-hero__sub { max-width: 32ch; }
+.th-hero__title { font-size: var(--h1-size); line-height: var(--h1-line); color: var(--text-on-inverse); }
+.th-hero__sub { margin-top: var(--space-1); font-size: var(--body-size); color: var(--text-grey-secondary-on-media); }
+
+/* Includes */
+.th-includes { padding: 0 var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
+.th-includes__label { font-size: var(--body-size); color: var(--text-primary); }
+.th-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.th-chip {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  font-size: var(--body-size);
+  color: var(--text-primary);
+}
+.th-chip__check {
+  display: grid; place-items: center;
+  width: 15px; height: 15px; border-radius: var(--radius-pill);
+  background: #4b7a52; color: #fff; font-size: 9px;
+}
+
+/* Service-type cards */
+.th-card {
+  margin-inline: var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-card-extra-light);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.th-card__title { font-size: var(--subtitle-display-size); font-weight: 500; color: var(--text-primary); }
+.th-card__sub { font-size: var(--body-size); color: var(--text-secondary); }
+.th-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: var(--space-2) 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-default);
+}
+.th-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+.th-row__name { font-size: var(--body-size); color: var(--text-primary); }
+.th-row__price { font-size: var(--body-size); color: var(--text-primary); font-weight: 500; white-space: nowrap; }
+.th-row__addon { font-size: var(--body-size); color: var(--text-secondary); white-space: nowrap; }
+.th-row__per { font-weight: 400; color: var(--text-secondary); }
+
+.th-book {
+  margin-top: var(--space-2);
+  align-self: flex-start;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-pill);
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  font-size: var(--body-size);
+}
+.th-contact {
+  margin-top: var(--space-2);
+  align-self: flex-start;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-pill);
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  font-size: var(--body-size);
+}
+
+@media (min-width: 1024px) {
+  .th { max-width: 720px; margin-inline: auto; }
+}
+
+/* ---- Figma pass (Home- About the property / Transport hub 1822:9930) ---- */
+/* Warm page surface so the white tiles stand out */
+.screen-shell:has(.th) { background: var(--surface-page); }
+.th { background: var(--surface-page); gap: var(--space-3); }
+/* Hero runs up under the translucent top bar; only the bottom corners are rounded */
+.th-hero {
+  margin: -60px var(--space-3) 0;
+  min-height: 341px;
+  border-radius: 0 0 20px 20px;
+}
+.th-hero__scrim { background: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0) 74%); }
+.th-hero__text { padding: 0 19px 22px; width: 100%; }
+.th-hero__title { font-size: 1.75rem; line-height: 32px; font-weight: 400; }
+.th-hero__sub { max-width: none; margin-top: var(--space-1); line-height: 20px; }
+.th__back { top: 72px; left: 8px; background: rgba(66, 66, 66, 0.55); }
+/* Tiles: white card, Inter type */
+.th-card {
+  margin-inline: var(--space-4);
+  padding: var(--space-4);
+  gap: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card-extra-light);
+}
+.th-card__title { font-family: var(--font-body); font-size: var(--subtitle-medium-size); line-height: 22px; font-weight: 500; }
+.th-card__sub { font-size: var(--body-size); line-height: 20px; color: var(--text-secondary); margin-top: calc(var(--space-2) * -1); }
+.th-rows { gap: 6px; margin: 0; padding-top: var(--space-3); }
+.th-row__name { font-size: var(--body-size); line-height: 20px; }
+.th-row__price { font-size: var(--body-size); line-height: 20px; font-weight: 600; }
+.th-row__per { font-weight: 400; color: var(--text-primary); }
+.th-row__addon { color: var(--text-primary); }
+.th-book,
+.th-contact { margin-top: 0; width: 119px; height: 40px; padding: 0; text-align: center; }
+

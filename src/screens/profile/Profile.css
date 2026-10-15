@@ -1,0 +1,319 @@
+/* Profile screen — mobile: full-bleed hero + balance, then a padded column of
+   account fields and bookings; laptop: same content centered in a column.
+   Faithful to Figma nodes 1402:3497 (populated) and 1966:17050 (empty). */
+.profile-screen {
+  --field-border: #e5e5ea;
+  --status-success-light: #eff2ef;
+  --status-success-border: #d0e2cc;
+  --status-success-text: #256339;
+  --status-error-light: #f2efef;
+  --status-error-border: #e2cccc;
+  --status-error-text: #632525;
+
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-card-extra-light);
+  min-height: 100dvh;
+}
+
+/* ---------- Hero ---------- */
+.profile-hero {
+  position: relative;
+  height: 340px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--space-5);
+}
+.profile-hero__scrim {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 70%;
+  background: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0) 100%);
+}
+.profile-hero__back {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+}
+.profile-hero__back img {
+  width: 28px;
+  height: 28px;
+  filter: brightness(0) invert(1);
+}
+.profile-hero__text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.profile-hero__name {
+  font-size: 2rem; /* 32 */
+  line-height: 1.19;
+  font-weight: 400;
+  color: var(--text-on-inverse);
+}
+.profile-hero__location {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-grey-secondary-on-media);
+}
+
+/* ---------- Outstanding balance ---------- */
+.profile-balance {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-5) var(--space-5);
+  background: var(--surface-media);
+  border: 1px solid var(--border-on-media);
+  border-top: none;
+  border-radius: 0 0 20px 20px;
+}
+.profile-balance__label {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-on-media-muted);
+}
+.profile-balance__value {
+  font-size: 1.25rem; /* 20 */
+  line-height: 1.4;
+  color: var(--text-on-inverse);
+}
+
+/* ---------- Save ---------- */
+.profile-save {
+  height: 40px;
+  padding: 0 var(--space-6);
+  align-self: flex-start;
+  border-radius: var(--radius-pill);
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  font-size: var(--body-size);
+}
+.profile-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.profile-note {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+}
+.profile-note--ok { color: #256339; }
+.profile-note--err { color: #b4473b; }
+
+/* ---------- Body ---------- */
+.profile-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-4) 0; /* the footer's own gap sits below */
+}
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.profile-section__title {
+  font-size: 1.25rem; /* 20 */
+  line-height: 1.4;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+
+/* ---------- Fields ---------- */
+.profile-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.field__label {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.field__input {
+  height: 36px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--pure-white);
+  border: 1px solid var(--field-border);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+}
+.field__input--phone {
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+  overflow: hidden;
+}
+.phone-prefix {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-inline: var(--space-3);
+  background: #fafafa;
+  border-right: 1px solid var(--field-border);
+  font-size: var(--body-size);
+  color: var(--text-primary);
+}
+.phone-prefix__flag {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-pill);
+  object-fit: cover;
+}
+.phone-prefix__chevron {
+  width: 16px;
+  height: 16px;
+}
+.phone-number {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  padding-inline: var(--space-3);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+}
+
+/* ---------- Bookings ---------- */
+.booking-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.booking-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  background: var(--surface-card-extra-light);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+}
+.booking-card__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.booking-card__media {
+  flex: 0 0 auto;
+  width: 52px;
+  height: 52px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.booking-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.booking-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.booking-card__title {
+  font-size: var(--subtitle-medium-size);
+  line-height: var(--subtitle-medium-line);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.booking-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-secondary);
+}
+.booking-card__meta .dot {
+  width: 5px;
+  height: 5px;
+}
+.booking-card__status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.booking-card__price {
+  font-size: var(--subtitle-medium-size);
+  line-height: var(--subtitle-medium-line);
+  color: var(--text-primary);
+}
+.status-tag {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--caption-size);
+  line-height: var(--caption-line);
+}
+.status-tag--success {
+  background: var(--status-success-light);
+  border: 1px solid var(--status-success-border);
+  color: var(--status-success-text);
+}
+.status-tag--error {
+  background: var(--status-error-light);
+  border: 1px solid var(--status-error-border);
+  color: var(--status-error-text);
+}
+.status-tag--pending {
+  background: #fdf6e8;
+  border: 1px solid #e8c97a;
+  color: #7a5a14;
+}
+.booking-card__divider {
+  height: 0;
+  border: none;
+  border-top: 1px solid var(--border-default);
+}
+.booking-card__note {
+  font-size: var(--caption-size);
+  line-height: var(--caption-line);
+  color: var(--text-grey-secondary);
+}
+
+/* ======================================================================
+   LAPTOP (>=1024px) — centered column.
+   ====================================================================== */
+@media (min-width: 1024px) {
+  /* Figma web (3132:24835): full 1280 frame; banner + balance bar inset by the 70px page margin,
+     banner flush under the link bar; account fields and booking cards run the full column. */
+  .profile-screen {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    min-height: 0;
+  }
+  .profile-hero {
+    height: 311px;
+    margin-inline: var(--page-pad);
+  }
+  .profile-balance {
+    margin-inline: var(--page-pad);
+  }
+  .profile-body {
+    padding: var(--space-5) calc(var(--page-pad) + var(--space-1)) 0;
+  }
+}

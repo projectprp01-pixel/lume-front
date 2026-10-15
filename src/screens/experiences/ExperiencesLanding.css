@@ -1,0 +1,302 @@
+.expl {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding-bottom: var(--space-6);
+}
+
+/* ---- Hero ---- */
+.expl-hero {
+  position: relative;
+  min-height: 240px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+}
+/* Mobile (Figma 336:5314): hero is inset 12px, 369x414, and runs up behind the
+   translucent sticky top bar (60px tall) instead of starting below it. */
+@media (max-width: 1023px) {
+  .expl-hero {
+    margin: -60px var(--space-3) 0;
+    min-height: 0;
+    aspect-ratio: 369 / 414;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .expl-hero__subtitle {
+    max-width: none;
+  }
+}
+.expl-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(30, 14, 6, 0.85) 0%, rgba(30, 14, 6, 0.1) 70%);
+}
+.expl-hero__content {
+  position: relative;
+  padding: var(--space-5) var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.expl-hero__title {
+  font-size: var(--h1-size);
+  line-height: var(--h1-line);
+  color: var(--text-on-inverse);
+}
+.expl-hero__subtitle {
+  font-size: var(--body-size);
+  color: var(--text-grey-secondary-on-media);
+  max-width: 280px;
+}
+.expl-hero__viewall {
+  align-self: flex-start;
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-sm);
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  font-size: var(--body-size);
+  border: none;
+  cursor: pointer;
+}
+
+/* ---- Landing cards (Figma 1787:4365) ---- */
+.expl-row {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: var(--space-1);
+}
+.expl > .section:last-child .expl-row { padding-bottom: 0; } /* standard gap above the footer */
+.expl-row::-webkit-scrollbar {
+  display: none;
+}
+.expl-card {
+  flex: 0 0 auto;
+  width: min(340px, 87vw);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface-card-extra-light);
+}
+.expl-card__media {
+  position: relative;
+  aspect-ratio: 340 / 169;
+}
+.expl-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.expl-card__badge {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface-inverse-deep);
+  color: var(--text-on-inverse);
+  font-size: var(--caption-size);
+}
+.expl-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+}
+.expl-card__title {
+  font-size: var(--subtitle-display-size);
+  line-height: var(--subtitle-display-line);
+  font-weight: 400;
+  color: var(--text-primary);
+}
+.expl-card__desc {
+  font-size: var(--body-size);
+  color: var(--text-grey-secondary);
+  /* two-line clamp, matching Figma */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: calc(var(--body-line) * 2em);
+}
+.expl-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--body-size);
+  color: var(--text-secondary);
+}
+.expl-card__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.expl-card__meta-item img {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---- Book Ahead brown band (Figma 1966:29282) ---- */
+.expl-band {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  /* torn / burnt top and bottom edge (Figma shows the page through a ragged 3-4px rim) */
+  mask-image: linear-gradient(#000 0 0), url(../../assets/bands/band-torn-edge.png),
+    url(../../assets/bands/band-torn-edge.png);
+  mask-size: 100% calc(100% - 8px), 256px 4px, 256px 4px;
+  mask-position: 0 4px, 0 0, 0 100%;
+  mask-repeat: no-repeat, repeat-x, repeat-x;
+  -webkit-mask-image: linear-gradient(#000 0 0), url(../../assets/bands/band-torn-edge.png),
+    url(../../assets/bands/band-torn-edge.png);
+  -webkit-mask-size: 100% calc(100% - 8px), 256px 4px, 256px 4px;
+  -webkit-mask-position: 0 4px, 0 0, 0 100%;
+  -webkit-mask-repeat: no-repeat, repeat-x, repeat-x;
+  background: #291409; /* surface/inverse */
+  padding-block: 30px 36px;
+}
+/* paper texture, rotated 180deg, centred and bleeding off the top (Figma "image 13") */
+.expl-band::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: -140px;
+  width: max(100%, 419px);
+  aspect-ratio: 419 / 629;
+  transform: translateX(-50%) rotate(180deg);
+  /* Figma blends this layer with Linear Burn (base - (255 - texture), per channel).
+     CSS has no such blend, so the result is pre-baked against the band colour. */
+  background: url(../../assets/bands/band-burn-exp.jpg) center / cover;
+  pointer-events: none;
+}
+.expl-band__inner {
+  padding-inline: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.expl-band__title {
+  font-size: var(--h3-size);
+  line-height: var(--h3-line);
+  font-weight: 500;
+  font-style: italic; /* Jazmin Medium Italic */
+  color: var(--text-on-inverse);
+}
+.expl-band__subtitle {
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-grey-secondary);
+  margin-bottom: 14px; /* + 6px gap = 20px to the cards */
+}
+.expl-band .expl-row {
+  gap: 8px;
+}
+/* Dark card variant (Figma 1966:29285): 340 wide, 205 media, #342727 body, no
+   description line — title + duration · price only. */
+.expl-card--dark {
+  background: #342727; /* accent/dark */
+  border: none;
+  border-radius: var(--radius-sm);
+}
+.expl-card--dark .expl-card__media {
+  aspect-ratio: 340 / 205;
+}
+.expl-card--dark .expl-card__badge {
+  top: 12px;
+  right: 12px;
+  padding: 6px 12px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--text-on-media-muted);
+}
+.expl-card--dark .expl-card__body {
+  gap: 8px;
+  padding: 12px 20px;
+}
+.expl-card--dark .expl-card__title {
+  font-weight: 500;
+  color: var(--text-on-inverse);
+}
+.expl-card--dark .expl-card__meta {
+  gap: 6px;
+  color: var(--text-on-media-muted);
+}
+.expl-card--dark .expl-card__meta-item {
+  gap: 4px;
+}
+.expl-card--dark .dot {
+  width: 5px;
+  height: 5px;
+}
+
+/* ---- Categories ---- */
+.expl-categories {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+.expl-category {
+  padding: var(--space-5) var(--space-4);
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: var(--subtitle-medium-size);
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+@media (min-width: 1024px) {
+  /* Figma web (3049:16851): a 1280 frame. The banner is inset by the 70px page margin, flush under the
+     link bar with rounded bottom corners; headings and cards start 8px inside it and the card rows run
+     off the right edge of the screen (they scroll); the Book Ahead band is full-bleed. */
+  .expl {
+    --expl-x: calc(max(0px, (100vw - 1280px) / 2) + var(--page-pad) + var(--space-2));
+    width: 100%;
+  }
+  .expl-hero {
+    width: 100%;
+    max-width: calc(1280px - 2 * var(--page-pad));
+    margin-inline: auto;
+    min-height: 341px;
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    overflow: hidden;
+  }
+  .expl-hero__content {
+    padding-inline: 28px;
+  }
+  .expl-hero__subtitle {
+    max-width: none;
+  }
+  .expl > .section {
+    max-width: none;
+    margin-inline: 0;
+    padding-inline: var(--expl-x);
+  }
+  .expl > .section .expl-row {
+    margin-right: calc(-1 * var(--expl-x));
+    padding-right: var(--expl-x);
+  }
+  .expl-band__inner {
+    padding-left: var(--expl-x);
+    padding-right: 0;
+  }
+  .expl-band .expl-row {
+    padding-right: var(--expl-x);
+  }
+  .expl-categories {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.expl-section-subtext {
+  margin: 0 0 var(--space-3);
+  opacity: 0.75;
+}

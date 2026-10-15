@@ -1,0 +1,81 @@
+.mlb {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: rgba(20, 10, 5, 0.92);
+}
+.mlb__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: 100vw;
+  max-height: 100dvh;
+  padding: var(--space-6) var(--space-4);
+}
+.mlb__media {
+  max-width: 100%;
+  max-height: 72dvh;
+  border-radius: var(--radius-sm);
+  background: #000;
+}
+.mlb__caption { max-width: 480px; text-align: center; color: var(--text-on-inverse); }
+.mlb__title { font-size: var(--subtitle-medium-size); font-weight: 500; }
+.mlb__desc { margin-top: var(--space-1); font-size: var(--body-size); color: var(--text-grey-secondary-on-media); }
+.mlb__close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+}
+.mlb__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 56px;
+  color: #fff;
+  font-size: 40px;
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+}
+.mlb__nav--prev { left: var(--space-2); }
+.mlb__nav--next { right: var(--space-2); }
+.mlb__count {
+  position: absolute;
+  bottom: var(--space-4);
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--text-grey-secondary-on-media);
+  font-size: var(--caption-size);
+}
+
+/* Videos (a file or a YouTube/Vimeo embed) sit in a fixed 16:9 frame whatever the clip's own shape — a vertical
+   clip is pillarboxed inside it — the same as the dashboard's preview. */
+.mlb__frame {
+  width: min(100%, 960px);
+  aspect-ratio: 16 / 9;
+  max-height: 72dvh;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: #000;
+}
+.mlb__frame iframe,
+.mlb__frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: contain;
+}

@@ -1,0 +1,26 @@
+.pdfthumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.pdfthumb__canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  background: #fff;
+  transition: opacity 0.2s;
+}
+.pdfthumb__doc {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-size: var(--body-size);
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}

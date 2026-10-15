@@ -1,0 +1,47 @@
+.cartfab {
+  position: fixed;
+  right: var(--space-4);
+  bottom: 86px; /* clears the 62px tab bar */
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-card-extra-light);
+  color: var(--text-primary);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  touch-action: none; /* dragging moves the button instead of scrolling the page */
+  cursor: grab;
+  user-select: none;
+}
+/* Once dragged, left/top (inline) place it; drop the default bottom-right anchoring. */
+.cartfab--moved {
+  right: auto;
+  bottom: auto;
+}
+.cartfab__count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  font-size: var(--caption-size);
+  font-weight: 600;
+}
+@media (min-width: 1024px) {
+  .cartfab {
+    right: var(--space-6);
+    bottom: var(--space-6);
+  }
+  .cartfab--moved {
+    right: auto;
+    bottom: auto;
+  }
+}

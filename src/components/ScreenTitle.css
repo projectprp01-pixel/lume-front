@@ -1,0 +1,22 @@
+.screen-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 32px;
+}
+.screen-title__back {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+}
+.screen-title__back img {
+  width: 24px;
+  height: 24px;
+}
+.screen-title__text {
+  font-size: var(--h3-size); /* 24px Jazmin Medium */
+  line-height: var(--h3-line);
+  font-weight: 500;
+  color: var(--text-primary);
+}

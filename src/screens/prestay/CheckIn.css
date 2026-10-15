@@ -1,0 +1,443 @@
+/* Online Check-in — hub (guest list + progress), confirm-details step, and the
+   document-upload modal. Faithful to Figma 2946:14008, 1703:3598, 2552:8134. */
+@import './prestay.css';
+
+.checkin {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+/* ---------- Hub ---------- */
+.checkin__hub,
+.checkin__confirm {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-5) 0;
+  max-width: 440px;
+  width: 100%;
+  margin-inline: auto;
+}
+.checkin__title {
+  font-size: var(--h3-size);
+  line-height: var(--h3-line);
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: center;
+}
+.checkin__title--left {
+  text-align: left;
+}
+
+.checkin__share {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.checkin__share-note {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-secondary);
+  text-align: center;
+}
+.checkin__rule {
+  height: 0;
+  border: none;
+  border-top: 1px solid var(--border-default);
+}
+
+.checkin__progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.checkin__progress-label {
+  font-size: var(--subtitle-medium-size);
+  line-height: var(--subtitle-medium-line);
+  font-weight: 500;
+  color: #000;
+}
+.checkin__segments {
+  display: flex;
+  gap: var(--space-3);
+}
+.checkin__segment {
+  flex: 1 1 0;
+  height: 4px;
+  border-radius: 256px;
+  background: var(--accent-subtle-light);
+}
+.checkin__segment--dim {
+  opacity: 0.25;
+}
+
+.checkin__add {
+  align-self: flex-start;
+  font-size: var(--subtitle-medium-size);
+  font-weight: 500;
+  color: var(--link-brown);
+  text-decoration: underline;
+}
+
+/* ---------- Guest rows ---------- */
+.guest-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: 19px;
+  background: var(--surface-card-extra-light);
+  border: 1px solid var(--border-light);
+  border-radius: 5px;
+  text-align: left;
+}
+.guest-row--empty {
+  height: 78px;
+}
+.guest-row__num {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-card-light-2);
+  color: var(--link-brown);
+  font-size: var(--body-size);
+}
+.guest-row__field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 84px;
+}
+.guest-row__label {
+  font-size: var(--caption-size);
+  line-height: var(--caption-line);
+  color: var(--text-secondary);
+}
+.guest-row__value {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.guest-row__edit {
+  margin-left: auto;
+  width: 32px;
+  height: 32px;
+}
+
+/* ---------- Footer (sticky action bar) ---------- */
+.checkin__footer {
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  padding: var(--space-4) var(--space-5);
+  margin-inline: calc(-1 * var(--space-5));
+  background: rgba(255, 251, 244, 0.85);
+  backdrop-filter: blur(20px);
+}
+
+/* ---------- Confirm step ---------- */
+.checkin__confirm-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.checkin__confirm-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.checkin__back {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+}
+.checkin__back img {
+  width: 24px;
+  height: 24px;
+}
+.checkin__confirm-sub {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-secondary);
+}
+.checkin__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ---------- Fields (shared by confirm + modal) ---------- */
+.ci-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.ci-field__label {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.ci-field__input {
+  height: 36px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--pure-white);
+  border: 1px solid var(--border-grey-light);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+}
+.ci-field__input--phone {
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+  overflow: hidden;
+}
+.ci-phone-prefix {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-inline: var(--space-3);
+  background: #fafafa;
+  border-right: 1px solid var(--border-grey-light);
+  font-size: var(--body-size);
+  color: var(--text-primary);
+}
+.ci-phone-prefix__flag {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-pill);
+  object-fit: cover;
+}
+.ci-phone-prefix__chevron {
+  width: 16px;
+  height: 16px;
+}
+.ci-phone-number {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  padding-inline: var(--space-3);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: var(--body-size);
+}
+
+/* ---------- Upload modal ---------- */
+.ci-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+}
+.ci-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 14, 6, 0.4);
+}
+.ci-modal__sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 361px;
+  padding: var(--space-4);
+  background: var(--surface-page);
+  border-radius: var(--radius-sm);
+  /* taller than the screen (the primary guest's details + upload): scroll inside the sheet */
+  max-height: calc(100dvh - var(--space-5));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+/* the title row and close button stay in reach while the form scrolls */
+.ci-modal__head {
+  position: sticky;
+  top: calc(var(--space-4) * -1);
+  z-index: 1;
+  margin: calc(var(--space-4) * -1) calc(var(--space-4) * -1) 0;
+  padding: var(--space-4) var(--space-4) var(--space-2);
+  background: var(--surface-page);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ci-modal__title {
+  font-size: var(--h3-size);
+  line-height: var(--h3-line);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.ci-modal__close {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+}
+.ci-modal__close img {
+  width: 30px;
+  height: 30px;
+}
+.ci-modal__intro {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-grey-secondary);
+}
+.ci-modal__intro strong {
+  font-weight: 700;
+}
+
+.ci-upload-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.ci-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 124px;
+  padding: var(--space-5);
+  background: var(--pure-white);
+  border: 1px solid var(--border-grey-light);
+  border-radius: var(--radius-sm);
+}
+.ci-upload__add {
+  width: 28px;
+  height: 28px;
+}
+.ci-upload__text {
+  font-size: var(--body-size);
+  font-weight: 500;
+  color: var(--text-grey-secondary);
+}
+.ci-upload__hint {
+  font-size: var(--caption-size);
+  line-height: var(--caption-line);
+  color: var(--text-grey-secondary);
+}
+.ci-upload--filled {
+  flex-direction: row;
+  gap: var(--space-4);
+}
+.ci-upload__thumb {
+  width: 130px;
+  height: 84px;
+  border-radius: 4px;
+  background: #d9d9d9;
+  object-fit: cover;
+}
+.ci-upload__thumb--file {
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+.ci-upload__edit,
+.ci-upload__remove {
+  width: 28px;
+  height: 28px;
+  opacity: 0.6;
+}
+.ci-add-id {
+  align-self: flex-start;
+  font-size: var(--body-size);
+  font-weight: 500;
+  color: var(--link-brown);
+  text-decoration: underline;
+}
+.ci-modal__submit {
+  width: 142px;
+  margin-top: var(--space-2);
+}
+
+/* Chosen filename inside a filled upload tile, and inline upload errors. */
+.ci-upload__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--caption-size);
+  color: var(--text-secondary);
+}
+.ci-modal__error {
+  color: #b4473b;
+  font-size: var(--caption-size);
+  margin-top: var(--space-2);
+}
+
+/* ---------- Review states on a guest card ---------- */
+/* the card is now a column: the main row, then (when rejected) the re-upload notice */
+.guest-row {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+}
+.guest-row--empty {
+  flex-direction: row;
+}
+.guest-row__main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+.guest-row__reject,
+.ci-reject {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid #e4cfcf;
+  border-radius: var(--radius-sm);
+  background: #f7eeee;
+  color: #7a3b3b;
+  font-size: var(--caption-size);
+  line-height: 18px;
+}
+.guest-row__reject .warn-icon,
+.ci-reject .warn-icon {
+  flex: none;
+}
+.guest-row--rejected {
+  border-color: #e4cfcf;
+}
+.guest-row--rejected .guest-row__value:last-child {
+  color: #a04545;
+}
+.ci-reject {
+  margin-top: var(--space-3);
+  font-size: var(--body-size);
+  line-height: 20px;
+  background: #f1eeee;
+  border-color: #e2dcdc;
+}
+/* approved: locked card, dimmed edit affordance */
+.guest-row--locked {
+  background: var(--surface-card);
+}
+.guest-row__lock {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  color: var(--text-secondary);
+}
+.ci-modal__intro--pre {
+  white-space: pre-line;
+}

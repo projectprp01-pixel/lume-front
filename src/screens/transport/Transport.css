@@ -1,0 +1,316 @@
+.tr {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-4) var(--space-6);
+}
+.tr-status { padding: var(--space-4) 0; color: var(--text-secondary); font-size: var(--body-size); }
+.tr-sub {
+  color: var(--text-secondary);
+  font-size: var(--body-size);
+  margin-top: calc(var(--space-3) * -1); /* sits tight under the title */
+}
+
+/* Offering selector */
+.tr-offerings { display: flex; gap: var(--space-2); overflow-x: auto; scrollbar-width: none; }
+.tr-offerings::-webkit-scrollbar { display: none; }
+.tr-offering {
+  flex: 0 0 auto;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+  background: var(--surface-card-extra-light);
+  font-size: var(--body-size);
+  color: var(--text-primary);
+}
+.tr-offering--active { background: var(--accent-default); border-color: var(--accent-default); color: var(--text-on-inverse); }
+
+.tr-section__title {
+  font-size: var(--h3-size);
+  line-height: var(--h3-line);
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+}
+
+/* ---- Large car-type cards (Figma) ---- */
+.tr-cars {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: var(--space-1);
+}
+.tr-cars::-webkit-scrollbar { display: none; }
+.tr-car {
+  flex: 0 0 auto;
+  width: min(330px, 86vw);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface-card-extra-light);
+}
+.tr-car--selected { border-color: var(--accent-default); }
+.tr-car__media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 330 / 180;
+  background: var(--surface-card);
+  padding: 0;
+  border: none;
+}
+.tr-car__media img { width: 100%; height: 100%; object-fit: cover; }
+.tr-car__ph { object-fit: contain !important; opacity: 0.5; padding: var(--space-5); }
+.tr-car__body { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-3) var(--space-4) var(--space-4); }
+.tr-car__head { display: flex; align-items: center; gap: var(--space-2); text-align: left; }
+.tr-car__check {
+  flex: 0 0 auto;
+  display: grid; place-items: center;
+  width: 20px; height: 20px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font-size: 12px; color: #fff;
+}
+.tr-car__check--on { background: var(--accent-default); border-color: var(--accent-default); }
+.tr-car__name { font-size: var(--subtitle-medium-size); font-weight: 500; color: var(--text-primary); }
+.tr-car__per { font-weight: 400; color: var(--text-secondary); }
+.tr-car__sub { font-size: var(--body-size); color: var(--text-secondary); padding-left: calc(20px + var(--space-2)); }
+.tr-stepper {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: var(--space-4);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  margin-left: calc(20px + var(--space-2));
+}
+.tr-stepper button { font-size: 1.1rem; color: var(--text-primary); width: 22px; }
+.tr-stepper span { min-width: 20px; text-align: center; }
+
+/* Includes chips */
+.tr-includes-label { font-size: var(--body-size); color: var(--text-primary); margin-bottom: var(--space-2); }
+.tr-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.tr-chip {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  font-size: var(--body-size);
+  color: var(--text-primary);
+}
+.tr-chip__check {
+  display: grid; place-items: center;
+  width: 15px; height: 15px; border-radius: var(--radius-pill);
+  background: #4b7a52; color: #fff; font-size: 9px;
+}
+
+/* Day picker */
+.tr-days { display: flex; gap: var(--space-2); overflow-x: auto; scrollbar-width: none; }
+.tr-days::-webkit-scrollbar { display: none; }
+.tr-day {
+  flex: 0 0 auto;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  width: 56px; padding: var(--space-3) 0;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card-extra-light);
+  color: var(--text-primary);
+}
+.tr-day__dow { font-size: var(--caption-size); color: var(--text-secondary); }
+.tr-day__dom { font-size: var(--subtitle-medium-size); font-weight: 500; }
+.tr-day--active { background: var(--accent-default); border-color: var(--accent-default); color: var(--text-on-inverse); }
+.tr-day--active .tr-day__dow { color: var(--text-grey-secondary-on-media); }
+
+/* Add-on card */
+.tr-addon-card {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.tr-addon-card__title { font-size: var(--subtitle-medium-size); font-weight: 500; color: var(--text-primary); }
+.tr-addon-card__desc { font-size: var(--body-size); color: var(--text-secondary); }
+.tr-addon-card__label { font-size: var(--body-size); color: var(--text-primary); margin-top: var(--space-2); }
+.tr-select {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card-extra-light);
+  font: inherit;
+  color: var(--text-primary);
+}
+
+.tr-error { color: #b4473b; font-size: var(--body-size); }
+
+@media (min-width: 1024px) {
+  .tr { max-width: 720px; margin-inline: auto; }
+}
+
+/* Full-trip duration callout */
+.tr-nights {
+  font-size: var(--subtitle-display-size);
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-top: calc(var(--space-3) * -1);
+}
+.tr-addon-card--on { background: var(--surface-card); border-color: var(--accent-default); }
+.tr-addon-card__head { display: flex; align-items: center; gap: var(--space-2); }
+.tr-addon-card__head input { width: 20px; height: 20px; accent-color: var(--accent-default); }
+.tr-addon-card__price {
+  margin-top: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-default);
+  font-size: var(--subtitle-display-size);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Long offering names wrap to two lines — let the title row grow instead of colliding with the subtitle */
+.tr .screen-title { height: auto; min-height: 32px; }
+
+/* ---- Figma pass (Transport- pickup and drop off 946:2399) ---- */
+/* Page surface is the warm page colour, not white */
+.screen-shell:has(.tr) { background: var(--surface-page); }
+.tr { background: var(--surface-page); gap: var(--space-5); padding-top: 20px; }
+.tr-section + .tr-section { margin-top: var(--space-2); }
+.tr-section__title {
+  font-size: 1.25rem; /* Jazmin Regular 20 / 28 */
+  line-height: 1.4;
+  font-weight: 400;
+  margin-bottom: 6px;
+}
+.tr-sub { font-size: var(--body-size); line-height: 20px; }
+.tr-car { border-radius: var(--radius-sm); }
+.tr-car--na { opacity: 0.5; }
+.tr-car__body { padding: var(--space-4) 20px 20px; background: var(--surface-card-extra-light); }
+.tr-car__name { font-size: 1.125rem; line-height: 26px; }
+.tr-car__per { color: #8a8a8e; font-size: var(--body-size); }
+.tr-car__check { width: 23px; height: 23px; background: var(--surface-card); }
+.tr-car__check--on { background: var(--surface-card); border-color: var(--accent-default); color: var(--accent-default); }
+/* "Includes" tags are the green success tags */
+.tr-chip {
+  padding: 4px 12px;
+  gap: 4px;
+  background: #eff2ef;
+  border: 1px solid #d0e2cc;
+  color: #256339;
+  font-size: var(--caption-size);
+  line-height: 16px;
+}
+.tr-chip__check { width: auto; height: auto; background: none; color: #256339; font-size: 12px; }
+/* Details / add-on card */
+.tr-addon-card {
+  gap: var(--space-4);
+  padding: var(--space-4) 20px 20px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-card-extra-light);
+}
+.tr-addon-card__label { margin-top: 0; font-weight: 500; }
+.tr-select {
+  height: 36px;
+  padding: 0 var(--space-3);
+  background: #fff;
+  border: 1px solid #e5e5ea;
+  border-radius: 4px;
+  font-size: var(--body-size);
+}
+.tr-addon-card__price { margin-top: 0; font-size: 1.125rem; }
+
+/* ---- Figma pass 2 (Transport- full day cab 1822:9986) ---- */
+/* "Includes:" label and tags share one wrapping row */
+.tr-includes { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.tr-includes__label { display: inline-flex; align-items: center; height: 26px; font-size: var(--body-size); line-height: 20px; color: var(--text-primary); }
+/* Car cards: 157px photo, name row, "make • capacity" row, quantity pill */
+.tr-car__media { aspect-ratio: auto; height: 157px; }
+.tr-car__sub { display: flex; align-items: center; gap: 6px; padding-left: 0; }
+.tr-car__dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-secondary); flex: none; }
+.tr-stepper {
+  display: grid;
+  grid-template-columns: 35px 1fr 35px;
+  align-items: center;
+  width: 110px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+  background: var(--surface-card-extra-light);
+}
+.tr-stepper button {
+  width: 35px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  background: var(--surface-page);
+  font-size: 1.125rem;
+  line-height: 1;
+}
+.tr-stepper button:first-child { border-right: 1px solid var(--border-default); }
+.tr-stepper button:last-child { border-left: 1px solid var(--border-default); }
+.tr-stepper button:disabled { opacity: 0.4; }
+.tr-stepper span { text-align: center; font-size: var(--body-size); }
+/* Day cards: 74x68, tan highlight when picked (several days can be picked) */
+.tr-days { gap: var(--space-2); }
+.tr-day { width: 74px; height: 68px; padding: var(--space-3); gap: 2px; border-radius: 4px; justify-content: flex-start; }
+.tr-day__dow { font-size: var(--body-size); line-height: 20px; }
+.tr-day__dom { font-size: var(--subtitle-medium-size); line-height: 22px; font-weight: 600; }
+.tr-day--active { background: var(--surface-card-light-2); border-color: #a0836e; color: var(--text-primary); }
+.tr-day--active .tr-day__dow { color: var(--text-secondary); }
+/* Add-on card turns tan once ticked */
+.tr-addon-card--on { background: var(--surface-card-light-2); border-color: #a0836e; }
+.tr-addon-card__title { font-size: var(--subtitle-medium-size); font-weight: 500; }
+
+/* Colour fixes from the Figma audit (1822:9986) */
+/* Unpicked days have no fill — the cream page shows through; picked ones are the tan card */
+.tr-day { background: transparent; }
+.tr-day--active { background: var(--surface-card-light-2); }
+/* A picked car card keeps the normal border (the tick and quantity show it is picked) */
+.tr-car--selected { border-color: var(--border-default); }
+
+/* Rate matrix: cities x cars */
+.tr-matrix-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card-extra-light);
+}
+.tr-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-primary);
+}
+.tr-matrix th,
+.tr-matrix td {
+  padding: var(--space-2) var(--space-3);
+  text-align: right;
+  white-space: nowrap;
+}
+.tr-matrix th:first-child {
+  text-align: left;
+  font-weight: 400;
+}
+.tr-matrix thead th {
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-default);
+}
+.tr-matrix tbody tr {
+  cursor: pointer;
+}
+.tr-matrix tbody tr + tr th,
+.tr-matrix tbody tr + tr td {
+  border-top: 1px solid var(--border-default);
+}
+.tr-matrix__on th,
+.tr-matrix__on td {
+  background: var(--surface-card);
+  font-weight: 600;
+}
+
+.tr-note { color: #256339; font-size: var(--body-size); line-height: 20px; }

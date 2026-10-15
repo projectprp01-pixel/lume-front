@@ -1,0 +1,54 @@
+/* Bottom tab bar — mobile only (Figma node 279:3159).
+   Sticky to the bottom of the viewport; dark bar matching the design. */
+.bottomnav {
+  position: sticky;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-3) var(--space-5) var(--space-5);
+  background: var(--surface-inverse-deep);
+}
+
+.bottomnav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 71px;
+  /* inactive tint */
+  color: #776060;
+}
+.bottomnav__item--active {
+  color: var(--text-on-inverse);
+}
+
+.bottomnav__icon {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+.bottomnav__icon svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
+.bottomnav__label {
+  font-size: var(--caption-size);
+  line-height: 20px;
+  letter-spacing: var(--label-large-tracking);
+  text-align: center;
+}
+.bottomnav__item--active .bottomnav__label {
+  font-weight: 500;
+}
+
+/* Laptop uses the top nav instead */
+@media (min-width: 1024px) {
+  .bottomnav {
+    display: none;
+  }
+}

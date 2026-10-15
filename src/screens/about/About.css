@@ -1,0 +1,127 @@
+/* About the property — Figma 2933:12739 (web) + its mobile frame: hero with the title over the photo,
+   "Our Story", and "Property Rules" as an accordion. */
+.about {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-bottom: var(--space-6);
+}
+
+/* ---- Hero ---- */
+.about-hero {
+  position: relative;
+  min-height: 341px;
+  /* mobile: runs up behind the translucent top bar, inset 12px (same as the experience pages) */
+  margin: -60px var(--space-3) 0;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--surface-card) center / cover no-repeat;
+  display: flex;
+  align-items: flex-end;
+}
+.about-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 60%);
+}
+.about-hero__back {
+  position: absolute;
+  top: 72px;
+  left: var(--space-4);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+}
+.about-hero__back img { width: 22px; height: 22px; filter: brightness(0) invert(1); }
+.about-hero__text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-5) var(--space-4);
+}
+.about-hero__eyebrow {
+  font-size: var(--body-size);
+  line-height: 20px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-grey-secondary-on-media);
+}
+.about-hero__title {
+  font-size: var(--h1-size);
+  line-height: var(--h1-line);
+  font-weight: 400;
+  color: var(--text-on-inverse);
+}
+
+/* ---- Body ---- */
+.about-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-inline: var(--space-4);
+}
+.about-status { font-size: var(--body-size); color: var(--text-secondary); }
+.about-section { display: flex; flex-direction: column; gap: var(--space-2); }
+.about-section__title {
+  font-size: 1.5rem;
+  line-height: 1.33;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+.about-story { font-size: var(--body-size); line-height: var(--body-line); color: var(--text-primary); white-space: pre-line; }
+
+/* ---- Property rules accordion ---- */
+.about-rules { display: flex; flex-direction: column; }
+.about-rule { border-bottom: 1px solid var(--border-default); }
+.about-rule__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4) 0;
+  text-align: left;
+}
+.about-rule__heading { font-size: var(--subtitle-medium-size); line-height: var(--subtitle-medium-line); font-weight: 400; color: var(--text-primary); }
+.about-rule__chevron { flex: none; color: var(--text-secondary); transition: transform 0.2s ease; }
+.about-rule__chevron--open { transform: rotate(180deg); }
+.about-rule__body {
+  padding-bottom: var(--space-4);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-primary);
+  white-space: pre-line;
+}
+
+/* ---- Laptop (>=1024px): Figma 1280 frame — hero inset by the 70px page margin, flush under the link bar ---- */
+@media (min-width: 1024px) {
+  .about { width: 100%; max-width: 1280px; margin-inline: auto; gap: var(--space-5); }
+  .about-hero { margin: 0 var(--page-pad); border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
+  .about-hero__back { top: var(--space-4); left: var(--space-5); }
+  .about-hero__text { padding-inline: 28px; }
+  .about-body { padding-inline: calc(var(--page-pad) + var(--space-2)); }
+}
+
+/* ---- Event detail page (EventDetail.tsx): title row, photo, text — kept as it was ---- */
+.evd { display: flex; flex-direction: column; gap: var(--space-4); padding-bottom: var(--space-6); }
+.evd-status { padding: 0 var(--space-4); font-size: var(--body-size); color: var(--text-secondary); }
+.evd-hero {
+  margin-inline: var(--space-4);
+  aspect-ratio: 360 / 200;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-card);
+}
+.evd-hero img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.evd-body { display: flex; flex-direction: column; gap: var(--space-3); padding-inline: var(--space-4); }
+.evd-name { font-size: var(--h1-size); line-height: var(--h1-line); color: var(--text-primary); }
+.evd-story { font-size: var(--body-size); line-height: 1.5; color: var(--text-primary); white-space: pre-line; overflow-wrap: anywhere; }
+@media (min-width: 1024px) {
+  .evd { width: 100%; max-width: 720px; margin-inline: auto; }
+}

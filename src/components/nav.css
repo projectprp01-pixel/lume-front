@@ -1,0 +1,101 @@
+/* Shared top-nav styling for the guest app.
+   - Mobile: translucent bar over the hero (notifications / logo / profile)
+   - Laptop: dark bar with text links (see DesktopNav)
+   Owns all .topnav* classes (previously inline in Home.css). */
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+}
+.topnav--mobile {
+  background: rgba(39, 25, 25, 0.2);
+  backdrop-filter: blur(30px);
+}
+.topnav--desktop {
+  display: none; /* shown at >=1024px */
+  background: var(--surface-inverse-deep);
+}
+.topnav__icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  background: #424242;
+}
+.topnav__icon img {
+  width: 24px;
+  height: 24px;
+}
+.topnav__logo-btn {
+  display: flex;
+}
+.topnav__logo {
+  /* The light wordmark asset is exported at ~2.1:1 (squeezed); the real Evolve Back wordmark is
+     ~6.5:1 (see the brown splash logo), so it's drawn into a 6.5:1 box instead of its natural size. */
+  width: 118px;
+  aspect-ratio: 6.5 / 1;
+  height: auto;
+  object-fit: fill;
+  flex: none;
+}
+.topnav--desktop .topnav__icon {
+  background: var(--surface-media-deep);
+}
+.topnav__links {
+  display: flex;
+  gap: var(--space-4);
+}
+.topnav__link {
+  font-size: var(--body-size);
+  color: var(--text-on-media-muted);
+}
+.topnav__link--active {
+  color: var(--text-on-inverse);
+  font-weight: 500;
+  text-decoration: underline;
+}
+.topnav__actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+@media (min-width: 1024px) {
+  .topnav--mobile {
+    display: none;
+  }
+  .topnav--desktop {
+    display: flex;
+  }
+  .topnav--desktop {
+    padding-inline: var(--gutter);
+  }
+}
+
+/* Opaque variant for booking / detail pages (Figma "Top nav bar" 1708:5032): mauve bar, dark wordmark */
+.topnav--solid {
+  background: var(--accent-subtle-light, #afa1a1);
+  backdrop-filter: none;
+}
+.topnav--solid .topnav__icon { background: var(--accent-subtle, #897777); }
+.topnav__logo-dark {
+  position: relative;
+  display: block;
+  width: 111px;
+  height: 24px;
+  overflow: hidden;
+}
+/* The wordmark is a crop of a larger export — same window as the splash logo, scaled to 111x24 */
+.topnav__logo-dark img {
+  position: absolute;
+  max-width: none;
+  width: 203.28%;
+  height: 657.73%;
+  left: -51.37%;
+  top: -280.12%;
+  pointer-events: none;
+}

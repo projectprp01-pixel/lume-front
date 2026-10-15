@@ -1,0 +1,212 @@
+/* Quick-action popups (WiFi / Directory / Directions) — Figma 661:3645,
+   661:3732, 1822:9673. 361px card on the page-cream surface over a dim scrim. */
+.infosheet {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgba(0, 0, 0, 0.5);
+}
+.infosheet__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: min(361px, 100%);
+  max-height: 90dvh;
+  padding: var(--space-4);
+  overflow-y: auto;
+  background: var(--surface-page);
+  border-radius: var(--radius-sm);
+}
+.infosheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.infosheet__title {
+  font-size: var(--h3-size);
+  line-height: 32px;
+  font-weight: 500;
+  color: #271919;
+}
+.infosheet__close {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+.infosheet__close img {
+  width: 100%;
+  height: 100%;
+}
+.infosheet__intro {
+  margin-top: calc(var(--space-1) * -1);
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-primary);
+}
+.infosheet__empty {
+  padding: var(--space-4) 0;
+  font-size: var(--body-size);
+  color: var(--text-secondary);
+}
+.infosheet__roomtype {
+  margin-bottom: var(--space-1);
+  font-size: var(--caption-size);
+  font-weight: 600;
+  color: var(--accent-default);
+}
+.infosheet__group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Beige note card ("Having trouble connecting?", "Our address") */
+.infosheet__note {
+  padding: var(--space-4);
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+}
+.infosheet__note-title {
+  font-size: var(--body-size);
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.infosheet__note-title--lg {
+  font-size: var(--subtitle-medium-size);
+  line-height: 24px;
+}
+.infosheet__note-body {
+  margin-top: var(--space-1);
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+
+/* ---- WiFi ---- */
+.wifi-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-4);
+}
+.wifi-card__rule {
+  height: 1px;
+  background: var(--border-default);
+}
+.wifi-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4) 0;
+  text-align: left;
+}
+.wifi-row__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.wifi-row__label {
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+.wifi-row__value {
+  font-size: var(--subtitle-medium-size);
+  line-height: 24px;
+  font-weight: 500;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+.wifi-row__hint {
+  font-size: var(--caption-size);
+  line-height: 16px;
+  color: var(--accent-subtle-light);
+}
+.wifi-row__icon {
+  flex: none;
+  color: var(--accent-default);
+}
+
+/* ---- Directory ---- */
+.dir-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.dir-list--divided {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-default);
+}
+.dir-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+}
+.dir-card__name {
+  font-size: var(--subtitle-medium-size);
+  line-height: 24px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.dir-card__meta {
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+.dir-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 36px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--button-primary-bg);
+  border-radius: var(--radius-pill);
+  font-size: var(--body-size);
+  color: var(--button-primary-bg);
+  background: transparent;
+  text-decoration: none;
+}
+.dir-btn--urgent {
+  background: #c0392b;
+  border-color: #c0392b;
+  color: var(--text-on-inverse);
+}
+.dir-btn--whatsapp {
+  border-color: #1fa463;
+  color: #1fa463;
+}
+
+/* ---- Directions ---- */
+.dirs-map {
+  width: 100%;
+  height: 130px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+}
+.dirs-open {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: flex-start;
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+.dirs-address {
+  white-space: pre-line;
+}

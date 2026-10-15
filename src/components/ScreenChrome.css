@@ -1,0 +1,22 @@
+/* Page shell for the in-stay tab screens: a full-height column so short pages
+   still push the footer down to the bottom (above the sticky bottom nav)
+   instead of leaving it floating mid-screen. */
+.screen-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+.screen-shell > main {
+  flex: 1 0 auto;
+}
+/* Footer is either a direct child of the shell or the last child of <main>
+   (itself a flex column) — auto top margin takes up the free space either way. */
+/* No leftover bottom padding under the footer — it sits flush on the bottom nav. */
+.screen-shell > main:has(> .footer:last-child),
+.screen-shell > main:has(+ .footer) {
+  padding-bottom: 0;
+}
+.screen-shell > .footer,
+.screen-shell > main > .footer {
+  margin-top: auto;
+}

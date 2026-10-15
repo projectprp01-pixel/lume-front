@@ -1,0 +1,68 @@
+/* Spa treatment page — Figma "Experiences- Spa detail" (1472:5423 / with image 3769:11244) */
+.spd {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-bottom: var(--space-6);
+  background: var(--surface-page);
+}
+.screen-shell:has(.spd) { background: var(--surface-page); }
+
+/* Plain title row (no treatment photo) */
+.spd-head { display: flex; flex-direction: column; gap: var(--space-2); padding: 20px var(--space-4) 0; }
+
+/* Hero (treatment has a photo): inset rounded card */
+.spd-hero {
+  position: relative;
+  min-height: 280px;
+  margin: var(--space-3) var(--space-3) 0;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--surface-media-deep);
+  display: flex;
+  align-items: flex-end;
+}
+.spd-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(30, 14, 6, 0.8) 0%, rgba(30, 14, 6, 0) 55%);
+}
+.spd-hero__back {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+}
+.spd-hero__back img { width: 22px; height: 22px; filter: brightness(0) invert(1); }
+.spd-hero__text { position: relative; padding: var(--space-5) var(--space-4); }
+.spd-hero__title { font-size: var(--h1-size); line-height: var(--h1-line); color: var(--text-on-inverse); }
+
+/* "🕐 45 min • Full body" */
+.spd-meta { display: flex; align-items: center; gap: var(--space-2); font-size: var(--body-size); color: var(--text-secondary); }
+.spd-meta--on-media { margin-top: var(--space-1); color: var(--text-grey-secondary-on-media); }
+.spd-meta__item { display: inline-flex; align-items: center; gap: var(--space-2); }
+.spd-meta__item img { width: 18px; height: 18px; }
+.spd-meta--on-media .spd-meta__item img { filter: brightness(0) invert(0.85); }
+.spd-meta__item .dot { width: 5px; height: 5px; filter: none; }
+
+.spd-body { display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-2) var(--space-4) 0; }
+.spd-body .xd-desc { margin-top: calc(var(--space-4) * -1); }
+
+/* Figma: the description reads in the primary text colour */
+.spd-body .xd-desc { color: var(--text-primary); }
+.spd-body .xd-seemore { color: var(--text-secondary); }
+
+/* Laptop: the page is the full 1280 frame (see ExperienceDetail.css); text lines up with the web design's margin. */
+@media (min-width: 1024px) {
+  .spd-head,
+  .spd-body { padding-inline: calc(var(--page-pad) + var(--space-2)); }
+}

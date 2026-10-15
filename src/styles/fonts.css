@@ -1,0 +1,13 @@
+/* Jazmin — the brand display/heading font (Figma uses it for all Display styles:
+   H1, H3, subtitle). Commercial font, self-hosted from public/fonts/.
+   Only a single Regular weight is available, so the face covers the 400–600
+   range — Medium (500) headings use real Jazmin rather than a synthesized bold.
+   --font-display resolves to it (see tokens.css). */
+
+@font-face {
+  font-family: 'Jazmin';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/Jazmin-Regular.otf') format('opentype');
+}

@@ -1,0 +1,201 @@
+/* In-room dining cart — Figma 1280:10091 / 2683:11687. Reuses the .ird-bar / .ird-btn /
+   stepper styles from InRoomDining.css. */
+.irc {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 24px;
+}
+.irc-head {
+  padding-inline: var(--space-4);
+}
+.irc-head .screen-title {
+  height: auto;
+}
+.irc-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0 var(--space-4) 24px;
+}
+.irc-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-4);
+  color: var(--text-secondary);
+}
+.irc-empty .ird-btn {
+  flex: none;
+  min-width: 200px;
+}
+
+/* ---------- Cart lines ---------- */
+.irc-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.irc-line {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px;
+  background: var(--surface-card-extra-light);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+}
+.irc-line__img {
+  flex: none;
+  width: 87px;
+  height: 87px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #d9d9d9;
+}
+.irc-line__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.irc-line__main {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.irc-line__name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--subtitle-medium-size);
+  line-height: 22px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.irc-line__name img {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+.irc-line__name span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.irc-line__sub {
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+.irc-line__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.irc-line__price {
+  font-size: var(--subtitle-medium-size);
+  line-height: 22px;
+  color: var(--text-primary);
+}
+
+/* ---------- Notes / room / summary ---------- */
+.irc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.irc-field__title {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+.irc-notes,
+.irc-room {
+  width: 100%;
+  font-family: inherit;
+  padding: 8px 12px;
+  background: var(--pure-white);
+  border: 1px solid var(--border-grey-light);
+  border-radius: 4px;
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-primary);
+}
+.irc-notes {
+  min-height: 72px;
+  resize: vertical;
+}
+.irc-room {
+  height: 36px;
+}
+.irc-notes::placeholder,
+.irc-room::placeholder {
+  color: rgba(64, 64, 64, 0.3);
+}
+.irc-summary {
+  padding: 16px;
+  background: var(--surface-card-extra-light);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+}
+.irc-summary ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-default);
+}
+.irc-summary li,
+.irc-summary__total {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-primary);
+}
+.irc-summary__total {
+  padding-top: 12px;
+  font-size: var(--subtitle-medium-size);
+  line-height: 22px;
+  font-weight: 600;
+}
+.irc-error {
+  font-size: var(--body-size);
+  color: #b4473b;
+}
+.irc-checkout {
+  flex: none;
+  width: 100%;
+  height: 44px;
+}
+
+/* ---------- Order placed ---------- */
+.irc--done {
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  padding: var(--space-7) var(--space-5);
+}
+.irc-done__title {
+  font-size: var(--h1-size);
+  line-height: 1.19;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+.irc-done__sub {
+  max-width: 34ch;
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+.irc-done__btn {
+  flex: none;
+  width: min(100%, 260px);
+}

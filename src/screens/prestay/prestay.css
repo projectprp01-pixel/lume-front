@@ -1,0 +1,89 @@
+/* Shared pre-stay primitives — buttons and the mauve top bar used by the
+   Pre-Arrival Email, Splash, and Online Check-in screens. */
+
+/* Pre-stay content sits on the warm page surface and, on large screens, is
+   previewed as a centered phone-width column (these are mobile-only designs). */
+.prestay-page {
+  background: var(--surface-page);
+  min-height: 100dvh;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  height: 44px;
+  padding: var(--space-3);
+  border-radius: 4px;
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+}
+.btn-primary__icon {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+}
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  height: 44px;
+  padding: var(--space-3);
+  border-radius: 4px;
+  background: var(--pure-white);
+  border: 1px solid var(--border-grey-light);
+  color: var(--text-primary);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+}
+
+/* Rounded "Share Link to Form" style button. */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  height: 40px;
+  padding: var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+}
+.btn-pill__icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Mauve top bar with the centered Evolve Back wordmark (check-in screens). */
+.prestay-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-4);
+  background: var(--accent-subtle-light);
+}
+.prestay-topbar__logo {
+  /* Same correction as .topnav__logo: the light wordmark asset is squeezed (~2.1:1), the real one is ~6.5:1. */
+  width: 118px;
+  aspect-ratio: 6.5 / 1;
+  height: auto;
+  object-fit: fill;
+}

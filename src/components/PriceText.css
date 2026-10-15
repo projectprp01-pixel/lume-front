@@ -1,0 +1,24 @@
+.price-text {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+}
+.price-text__was {
+  opacity: 0.6;
+  text-decoration: line-through;
+  font-size: 0.9em;
+}
+.price-text__amt {
+  font-weight: 600;
+}
+.price-text__tag {
+  font-size: 0.75em;
+  font-weight: 600;
+  line-height: 1;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: #e8f3e6;
+  color: #2f6b2a;
+  white-space: nowrap;
+}

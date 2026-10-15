@@ -1,0 +1,170 @@
+/* Notifications screen — mobile: single card column; laptop: same column
+   centered. Zero state centers an icon + message. Faithful to Figma nodes
+   1424:4023 (feed) and 2038:17807 (zero state). */
+.notifications-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-4) var(--space-6);
+  background: var(--surface-card-extra-light);
+  min-height: 100dvh;
+}
+.notifications-title {
+  font-size: var(--h3-size); /* 24 */
+  line-height: var(--h3-line);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* ---------- Feed ---------- */
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.notif-card {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-4) var(--space-5);
+  background: var(--surface-card-extra-light);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+}
+.notif-card__media {
+  flex: 0 0 auto;
+  width: 70px;
+  height: 70px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.notif-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.notif-card__media--empty {
+  background: #dfdfdf;
+}
+.notif-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.notif-card__title {
+  font-size: var(--subtitle-medium-size);
+  line-height: var(--subtitle-medium-line);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.notif-card__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-grey-secondary);
+  letter-spacing: var(--label-large-tracking);
+}
+.notif-card__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.notif-card__meta .dot {
+  width: 5px;
+  height: 5px;
+}
+.notif-card__desc {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-grey-secondary);
+}
+.notif-card__time {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* ---------- Zero state ---------- */
+.notifications-screen--empty {
+  justify-content: center;
+  align-items: center;
+}
+.notifications-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  max-width: 291px;
+  margin-block: auto;
+  text-align: center;
+}
+.notifications-empty__icon {
+  width: 45px;
+  height: 45px;
+}
+.notifications-empty__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.notifications-empty__title {
+  font-size: var(--h3-size);
+  line-height: var(--h3-line);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.notifications-empty__subtitle {
+  font-size: var(--subtitle-medium-size);
+  line-height: var(--subtitle-medium-line);
+  color: var(--text-grey-secondary);
+}
+
+/* ======================================================================
+   LAPTOP (>=1024px) — centered column.
+   ====================================================================== */
+@media (min-width: 1024px) {
+  .notifications-screen {
+    max-width: 720px;
+    margin-inline: auto;
+    padding: var(--space-5) var(--gutter) var(--space-7);
+  }
+}
+
+/* Header row with a "mark all read" action. */
+.notifications-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.notifications-readall {
+  background: none;
+  border: none;
+  color: var(--link-brown);
+  font-size: var(--body-size);
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Unread affordance: tappable card + a small dot. */
+.notif-card {
+  position: relative;
+  cursor: pointer;
+}
+.notif-card--unread {
+  background: var(--surface-card-light);
+}
+.notif-card__unread-dot {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--link-brown);
+}

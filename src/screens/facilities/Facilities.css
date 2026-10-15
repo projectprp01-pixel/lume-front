@@ -1,0 +1,77 @@
+/* Facilities — Figma 655:3566. Stacked photo cards on mobile, grid on laptop. */
+.fac {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.fac-status {
+  padding: 0 var(--space-4);
+  font-size: var(--body-size);
+  color: var(--text-secondary);
+}
+.fac-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-inline: var(--space-4);
+}
+.fac-card {
+  overflow: hidden;
+  background: var(--surface-card-extra-light);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+}
+.fac-card__media {
+  aspect-ratio: 360 / 168;
+  background: var(--surface-card);
+}
+.fac-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.fac-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+}
+.fac-card__name {
+  font-size: var(--subtitle-display-size);
+  line-height: 24px;
+  font-weight: 500;
+  color: #271919;
+}
+.fac-card__when {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+.fac-card__when img {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+@media (min-width: 1024px) {
+  .fac {
+    width: 100%;
+    max-width: var(--content-max);
+    margin-inline: auto;
+  }
+  .fac-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+}
+
+/* Title row: back arrow + heading aligned to the card gutter (Figma 655:3566) */
+.fac > .screen-title {
+  padding: var(--space-5) var(--space-4) 0;
+  height: auto;
+}

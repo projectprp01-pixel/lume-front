@@ -1,0 +1,91 @@
+/* Design tokens — sourced directly from Figma "Lume EB Theme" variables.
+   Do not hardcode these values elsewhere; reference the vars. */
+:root {
+  /* ---- Color: text ---- */
+  --text-primary: #171412;
+  --text-secondary: #9a907c;
+  --text-grey-secondary: #8a8a8e;
+  --text-on-inverse: #fffef9;
+  --text-on-media-muted: #afa1a1;
+  --text-grey-secondary-on-media: #acacac;
+
+  /* ---- Color: surface ---- */
+  --surface-page: #fffbf4;
+  --surface-card-light: #f8f7f4;
+  --surface-card-extra-light: #fffefd;
+  --surface-card: #f6f0e6;
+  --surface-card-light-2: #f9f5ee;
+  --surface-media: #554444;
+  --surface-media-deep: #3f2929;
+  --surface-inverse-deep: #1e0e06;
+  --pure-white: #ffffff;
+
+  /* ---- Color: border / fill / accent ---- */
+  --border-default: #e5dccc;
+  --border-light: #f6f0e6;
+  --border-grey-light: #e5e5ea;
+  --border-on-media: #665454;
+  --fill-on-media: #8b7272;
+  --fill-on-media-2: #9a907c;
+  --accent-default: #665454;
+  --accent-subtle: #897777;
+  --accent-subtle-light: #afa1a1;
+  --link-brown: #a0836e;
+
+  /* ---- Color: button ---- */
+  --button-primary-bg: #291409;
+  --button-primary-text: #fffef9;
+
+  /* ---- Typography families ---- */
+  --font-display: "Jazmin", "Cormorant Garamond", Georgia, serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* ---- Type scale (size / line-height) — fluid via clamp where useful ---- */
+  --h1-size: clamp(1.75rem, 1.4rem + 1.6vw, 2rem);   /* 28 -> 32 */
+  --h1-line: 1.19;
+  --h3-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.5rem); /* 22 -> 24 */
+  --h3-line: 1.33;
+  --subtitle-display-size: 1.125rem;  /* 18 */
+  --subtitle-display-line: 1.44;
+  --subtitle-medium-size: 1rem;       /* 16 */
+  --subtitle-medium-line: 1.375;
+  --body-size: 0.875rem;              /* 14 */
+  --body-line: 1.43;
+  --caption-size: 0.75rem;            /* 12 */
+  --caption-line: 1.33;
+  --label-large-size: 0.875rem;       /* 14 */
+  --label-large-line: 1.43;
+  --label-large-tracking: 0.1px;
+
+  /* ---- Spacing scale (4pt base) ---- */
+  --footer-gap: 56px; /* standard space between a screen's last content and the footer panel (72px on laptop) */
+  --space-1: 0.25rem;  /* 4  */
+  --space-2: 0.5rem;   /* 8  */
+  --space-3: 0.75rem;  /* 12 */
+  --space-4: 1rem;     /* 16 */
+  --space-5: 1.5rem;   /* 24 */
+  --space-6: 2rem;     /* 32 */
+  --space-7: 3rem;     /* 48 */
+
+  /* ---- Radius ---- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* ---- Layout ---- */
+  --content-max: 1280px;   /* laptop design width */
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  /* side margin of the laptop web frames (70px of the 1280 design) */
+  --page-pad: clamp(1.5rem, 5.5vw, 4.375rem);
+
+  /* ---- Breakpoints (for reference; used in media queries) ----
+     mobile: 320–767  (from 393px design)
+     laptop: 1024+    (from 1280px design) */
+}
+
+/* a little more air above the footer on laptop */
+@media (min-width: 1024px) {
+  :root { --footer-gap: 72px; }
+}

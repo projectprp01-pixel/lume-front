@@ -1,0 +1,527 @@
+/* Requests screen — mobile: single card column with a composer pinned to the
+   bottom; laptop: same centered 1139px column, wider cards & composer.
+   Faithful to Figma nodes 1822:12947 (mobile) and 3132:24281 (web). */
+.requests-screen {
+  --request-success: #1d9e75;
+  --request-success-light: #eff2ef;
+  --request-success-border: #d0e2cc;
+  --request-success-text: #256339;
+  --request-track: #d3d3d3;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4) var(--space-6);
+  background: var(--surface-card-extra-light);
+  /* height comes from .screen-shell, so the composer sits just above the tab bar */
+}
+
+/* ---------- Header row ---------- */
+.requests-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.requests-head__title {
+  font-size: var(--subtitle-display-size); /* 20 in Figma; 18 token is closest */
+  line-height: var(--subtitle-display-line);
+  font-weight: 400;
+  color: var(--text-primary);
+}
+.requests-pricesheet {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--button-primary-bg);
+  border-radius: var(--radius-pill);
+  color: var(--button-primary-bg);
+  font-size: var(--body-size);
+  white-space: nowrap;
+}
+
+/* ---------- Cards ---------- */
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.request-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  background: var(--surface-card-extra-light);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+}
+.request-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.request-card__title {
+  font-size: var(--subtitle-medium-size);
+  line-height: var(--subtitle-medium-line);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.request-card__message {
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-primary);
+}
+.request-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--text-secondary);
+}
+.request-card__dot {
+  line-height: 1;
+}
+.request-card__divider {
+  height: 0;
+  border: none;
+  border-top: 1px solid var(--border-default);
+}
+.request-card__status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.request-card__price {
+  font-size: var(--subtitle-medium-size);
+  line-height: var(--subtitle-medium-line);
+  color: var(--text-primary);
+}
+.request-tag {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--request-success-light);
+  border: 1px solid var(--request-success-border);
+  color: var(--request-success-text);
+  font-size: var(--caption-size);
+  line-height: var(--caption-line);
+}
+
+/* ---------- Progress tracker ---------- */
+.request-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.request-progress__track {
+  position: relative;
+  height: 4px;
+  border-radius: 256px;
+  background: var(--request-track);
+}
+.request-progress__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  height: 100%;
+  border-radius: 256px;
+  background: var(--request-success);
+}
+.request-progress__node {
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-pill);
+  transform: translate(-50%, -50%);
+  background: var(--request-track);
+}
+.request-progress__node--start {
+  left: 0;
+  background: var(--request-success);
+}
+.request-progress__node--mid {
+  left: 50%;
+  background: var(--request-success);
+}
+.request-progress__node--end {
+  left: 100%;
+}
+.request-progress__labels {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.request-progress__label {
+  font-size: var(--caption-size);
+  line-height: var(--caption-line);
+  font-weight: 500;
+  color: var(--text-grey-secondary);
+}
+.request-progress__label:first-child {
+  text-align: left;
+}
+.request-progress__label:last-child {
+  text-align: right;
+}
+
+/* ---------- Composer ---------- */
+.request-composer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding-top: var(--space-5);
+}
+.request-composer__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 36px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--pure-white);
+  border: 1px solid #e5e5ea;
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+}
+.request-composer__input::placeholder {
+  color: rgba(64, 64, 64, 0.3);
+}
+.request-composer__send {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+.request-composer__send img {
+  width: 32px;
+  height: 32px;
+}
+
+/* ======================================================================
+   LAPTOP (>=1024px) — centered 1139px column; wider cards & composer.
+   ====================================================================== */
+@media (min-width: 1024px) {
+  /* width:100% matters: the screen is a flex item of the page shell and `margin-inline: auto` alone
+     would shrink it to its content (a narrow phone-like column). */
+  .requests-screen {
+    gap: var(--space-3);
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: var(--space-5) var(--page-pad) var(--space-7);
+  }
+  .requests-cats__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .pricesheet__card {
+    width: min(510px, 100%);
+  }
+}
+
+/* Inline status / fallback notice for the requests list. */
+.requests-status {
+  padding: 0 var(--space-4) var(--space-2);
+  color: var(--color-muted, #8a8275);
+  font-size: 0.85rem;
+}
+
+/* ======================================================================
+   Mobile: no title row (Figma 1822:12947 / 452:7397 start straight under the
+   top bar) — hide the back/title row and tighten the top gap.
+   ====================================================================== */
+@media (max-width: 1023px) {
+  .requests-screen > .screen-title {
+    display: none;
+  }
+  .requests-screen {
+    padding-top: var(--space-5);
+  }
+}
+.requests-head__title,
+.requests-cats__title {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+/* ---------- Empty state: category tiles (Figma 452:7397) ---------- */
+.requests-cats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.requests-cats__title {
+  font-weight: 400;
+  color: var(--text-primary);
+}
+.requests-cats__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+.requests-cat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 110px;
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  border-radius: 4px;
+}
+.requests-cat__icon {
+  width: 28px;
+  height: 28px;
+  flex: none;
+}
+.requests-cat__icon--photo {
+  object-fit: cover;
+  border-radius: 4px;
+}
+.requests-cat__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.requests-cat__name {
+  font-size: var(--body-size);
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  color: #000;
+}
+.requests-cat__sub {
+  font-size: var(--caption-size);
+  line-height: normal;
+  color: #888;
+}
+
+/* ---------- Front Desk reply bubble ---------- */
+.request-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.request-reply {
+  align-self: flex-start;
+  width: calc(100% - 45px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-card-light);
+  border: 1px solid var(--border-default);
+  border-radius: 4px;
+}
+.request-reply__body {
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-primary);
+}
+.request-reply__by {
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+
+/* ---------- Price sheet modal (Figma 460:8015) ---------- */
+.pricesheet {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgba(0, 0, 0, 0.5);
+}
+.pricesheet__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: min(361px, 100%);
+  min-height: min(511px, 80dvh);
+  max-height: 85dvh;
+  padding: var(--space-4);
+  overflow-y: auto;
+  background: var(--surface-page);
+  border-radius: var(--radius-sm);
+}
+.pricesheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pricesheet__title {
+  font-size: var(--h3-size);
+  line-height: 32px;
+  font-weight: 500;
+  color: #271919;
+}
+.pricesheet__close {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+.pricesheet__close img {
+  width: 100%;
+  height: 100%;
+}
+.pricesheet__tabs {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.pricesheet__tabs::-webkit-scrollbar {
+  display: none;
+}
+.pricesheet__tab {
+  flex: none;
+  padding: 4px var(--space-4);
+  font-size: var(--body-size);
+  line-height: 20px;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-default);
+  border-radius: 4px 4px 0 0;
+}
+.pricesheet__tab--on {
+  font-weight: 600;
+  color: var(--surface-inverse-deep);
+  border-bottom-color: var(--button-primary-bg);
+}
+.pricesheet__table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  font-size: var(--caption-size);
+  line-height: 16px;
+  color: var(--text-primary);
+}
+.pricesheet__row {
+  display: flex;
+  gap: var(--space-3);
+}
+.pricesheet__row > span:first-child {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.pricesheet__row > span:last-child {
+  flex: none;
+  width: 105px;
+}
+.pricesheet__row--head {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* Hint at the top of the page, set from the dashboard's Guest App → Requests tab */
+.requests-intro {
+  margin: 0 0 var(--space-4);
+  font-size: var(--body-size);
+  color: var(--text-secondary, inherit);
+  opacity: 0.8;
+}
+
+/* ---------- Chat / Requests toggle ---------- */
+.requests-toggle {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+}
+.requests-toggle__btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 36px;
+  border-radius: var(--radius-pill);
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+.requests-toggle__btn--on {
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+}
+.requests-toggle__count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-card-extra-light);
+  color: var(--text-primary);
+  font-size: var(--caption-size);
+  font-weight: 600;
+}
+.requests-head__title--sub {
+  margin-top: var(--space-3);
+}
+
+/* ---------- Chat thread ---------- */
+.chat-thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.chat-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 82%;
+}
+.chat-msg__body {
+  padding: var(--space-3) var(--space-4);
+  border-radius: 16px;
+  font-size: var(--body-size);
+  line-height: 20px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.chat-msg__meta {
+  padding-inline: var(--space-2);
+  font-size: var(--caption-size);
+  line-height: 16px;
+  color: var(--text-secondary);
+}
+.chat-msg--me {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+.chat-msg--me .chat-msg__body {
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  border-bottom-right-radius: 4px;
+}
+.chat-msg--them {
+  align-self: flex-start;
+}
+.chat-msg--them .chat-msg__body {
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  border-bottom-left-radius: 4px;
+}
+
+/* Laptop: the Chat / Requests switch is a compact pill, not full width */
+@media (min-width: 1024px) {
+  .requests-toggle--laptop { align-self: flex-start; width: 360px; }
+}

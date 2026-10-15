@@ -1,0 +1,387 @@
+/* In-room dining menu — Figma 1020:3601 (open) / 2038:18133 (closed). Shared by the
+   cart and "Menus" screens (ird-* classes). */
+.ird {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 24px;
+}
+
+/* ---------- Header ---------- */
+.ird-head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-inline: var(--space-4);
+}
+.ird-head .screen-title {
+  height: auto;
+}
+.ird-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: -6px;
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+.ird-meta img {
+  width: 18px;
+  height: 18px;
+}
+.ird-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #fdf6e8;
+  border: 1px solid #e8c97a;
+  border-radius: 4px;
+}
+.ird-notice img {
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+.ird-notice__title {
+  font-size: var(--body-size);
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.ird-notice__sub {
+  font-size: var(--caption-size);
+  line-height: 16px;
+  color: var(--text-secondary);
+}
+.ird-menus {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 0;
+  font-size: var(--subtitle-medium-size);
+  line-height: 22px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: underline;
+}
+.ird-menus img {
+  width: 24px;
+  height: 24px;
+}
+.ird-status {
+  padding-inline: var(--space-4);
+  font-size: var(--body-size);
+  color: var(--text-secondary);
+}
+
+/* ---------- Category tabs ---------- */
+.ird-tabs {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  padding-left: var(--space-4);
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--border-default);
+}
+.ird-tabs::-webkit-scrollbar {
+  display: none;
+}
+.ird-tab {
+  flex: none;
+  height: 100%;
+  padding: 4px var(--space-4);
+  font-size: var(--subtitle-medium-size);
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-default);
+  border-radius: 4px 4px 0 0;
+}
+.ird-tab--on {
+  font-weight: 600;
+  color: var(--surface-inverse-deep);
+  border-bottom-color: var(--button-primary-bg);
+}
+
+/* ---------- Sections + dishes ---------- */
+.ird-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0 var(--space-4) 24px;
+}
+.ird-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ird-section__head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ird-section__title {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+.ird-section__avail {
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+.ird-sub {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ird-sub__title {
+  font-size: var(--body-size);
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.ird-dishes {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.ird-dish {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.ird-dish__img {
+  flex: none;
+  width: 103px;
+  height: 101px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #d9d9d9;
+}
+.ird-dish__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ird-dish__main {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ird-dish__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 61px;
+}
+.ird-dish__name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--subtitle-medium-size);
+  line-height: 22px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.ird-dish__name span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ird-diet {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+.ird-dish__desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+.ird-dish__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+}
+.ird-dish__price {
+  font-size: var(--subtitle-medium-size);
+  line-height: 22px;
+  color: var(--text-primary);
+}
+
+/* + button / quantity stepper (shared with the cart) */
+.ird-add {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  font-size: var(--body-size);
+  color: #291409;
+  background: var(--surface-card-extra-light);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+}
+.ird-stepper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 110px;
+  height: 32px;
+  background: var(--surface-card-extra-light);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+.ird-stepper button {
+  width: 35px;
+  height: 100%;
+  font-size: var(--body-size);
+  color: var(--text-primary);
+  background: var(--surface-page);
+}
+.ird-stepper button:first-child {
+  border-right: 1px solid var(--border-default);
+}
+.ird-stepper button:last-child {
+  border-left: 1px solid var(--border-default);
+}
+.ird-stepper span {
+  flex: 1;
+  text-align: center;
+  font-size: var(--body-size);
+  color: var(--text-primary);
+}
+
+/* ---------- Bottom bar (surface/card) ---------- */
+.ird-bar {
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 16px 42px;
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+}
+.ird-bar__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+  line-height: 26px;
+  color: var(--text-primary);
+}
+.ird-bar__total strong {
+  font-weight: 600;
+}
+.ird-bar__total small {
+  font-size: var(--body-size);
+  line-height: 20px;
+}
+.ird-bar__actions {
+  display: flex;
+  gap: 8px;
+}
+.ird-btn {
+  flex: 1 1 0;
+  height: 40px;
+  padding: 10px;
+  font-size: var(--body-size);
+  line-height: 20px;
+  border-radius: var(--radius-pill);
+}
+.ird-btn--outline {
+  color: var(--button-primary-bg);
+  border: 1px solid var(--button-primary-bg);
+}
+.ird-btn--primary {
+  color: var(--button-primary-text);
+  background: var(--button-primary-bg);
+}
+.ird-btn:disabled {
+  background: #8b7272;
+  border-color: #8b7272;
+  color: var(--button-primary-text);
+  cursor: not-allowed;
+}
+
+@media (min-width: 1024px) {
+  .ird {
+    width: 100%;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+  .ird-bar {
+    padding-bottom: 16px;
+  }
+}
+
+/* ---------- "Menus" listing (Figma 2209:22583) ---------- */
+.ird--menus {
+  gap: 16px;
+}
+.ird-menugrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 12px;
+  padding-inline: var(--space-4);
+}
+.ird-menutile {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+}
+.ird-menutile__img {
+  display: block;
+  aspect-ratio: 174 / 170;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #e0e0e0;
+}
+.ird-menutile__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ird-menutile__name {
+  font-size: var(--subtitle-medium-size);
+  line-height: 22px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.ird-menutile__hours {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: -6px;
+  font-size: var(--body-size);
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+.ird-menutile__hours img {
+  width: 18px;
+  height: 18px;
+}
