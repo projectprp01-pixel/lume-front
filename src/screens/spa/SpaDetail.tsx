@@ -215,7 +215,7 @@ export default function SpaDetail() {
     const result = await cart.checkout(extra ? [extra] : [])
     setBusy(false)
     if (result.status === 'done') setDone(true)
-    else if (result.status === 'dismissed') setBookError('Payment was not completed. Your items are still in the cart. Tap Pay now to try again.')
+    else if (result.status === 'dismissed') setBookError('Payment was not completed, so nothing has been booked. Your items are still in your cart.')
     else setBookError(result.message)
   }
 
@@ -229,9 +229,7 @@ export default function SpaDetail() {
           ? 'Booked ✓'
           : busy
             ? 'Processing…'
-            : cart.hasUnpaid
-              ? 'Pay now'
-              : total + cart.total > 0
+            : total + cart.total > 0
                 ? 'Book & Pay'
                 : 'Book Now',
         onClick: book,

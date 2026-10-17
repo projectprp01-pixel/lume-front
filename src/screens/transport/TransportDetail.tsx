@@ -257,7 +257,7 @@ export default function TransportDetail() {
     if (result.status === 'done') {
       setDone(true)
       setQtys({})
-    } else if (result.status === 'dismissed') setBookError('Payment was not completed. Your items are still in the cart.')
+    } else if (result.status === 'dismissed') setBookError('Payment was not completed, so nothing has been booked. Your items are still in your cart.')
     else setBookError(result.message)
   }
 

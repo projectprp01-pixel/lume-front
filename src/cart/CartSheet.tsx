@@ -33,7 +33,7 @@ export default function CartSheet({ onClose }: { onClose: () => void }) {
     setBusy(false)
     if (result.status === 'done') setDone(result.booked)
     else if (result.status === 'dismissed')
-      setMessage({ ok: false, text: 'Payment was not completed. Your items are saved and nothing is lost. Tap Pay now to pay for everything together.' })
+      setMessage({ ok: false, text: 'Payment was not completed, so nothing has been booked. Your items are still in your cart.' })
     else setMessage({ ok: false, text: result.message })
   }
 
@@ -84,7 +84,7 @@ export default function CartSheet({ onClose }: { onClose: () => void }) {
             </div>
             {message && <p className={message.ok ? 'cartsheet__ok' : 'cartsheet__err'}>{message.text}</p>}
             <button className="bk-btn bk-btn--primary" onClick={() => gate(checkout)} disabled={busy || cart.count === 0}>
-              {busy ? 'Processing…' : cart.hasUnpaid ? 'Pay now' : cart.total > 0 ? 'Book & Pay' : 'Book Now'}
+              {busy ? 'Processing…' : cart.total > 0 ? 'Book & Pay' : 'Book Now'}
             </button>
           </>
         )}
