@@ -32,7 +32,7 @@ function toOutdoor(r: ApiRestaurant): Restaurant {
     id: r._id,
     image: r.imageUrl,
     name: r.name,
-    type: r.subtitle || (r.cuisine ?? []).join(', ') || 'Restaurant',
+    type: (r.cuisine ?? []).join(', ') || r.subtitle || 'Restaurant',
     meals: mealsLabel(r) || 'All day',
   }
 }

@@ -78,7 +78,7 @@ export function AppConfigProvider({ children }: { children: ReactNode }) {
         gallery: on(g.homeToggles?.gallery),
       },
       quickActionOn: (key) => on(g.quickActions?.[stage]?.[key]),
-      inRoomOrderingEnabled: false, // In-room ordering is switched off for now (dashboard SKU hidden); was on(g.inRoomOrderingEnabled)
+      inRoomOrderingEnabled: on(g.inRoomOrderingEnabled),
       showsInStage: (s) => !s || s === 'both' || s === stage,
       discounts: discounts ?? [],
     }

@@ -27,13 +27,16 @@ export function cardUnit(label?: string): string {
   const l = (label ?? '').toLowerCase()
   if (/group|couple|booking/.test(l)) return 'per group'
   if (/person|head|guest|pax|adult/.test(l)) return 'per person'
-  return l.replace(/\(.*?\)/g, '').replace(/\b(incl|inclusive|excl|exclusive)\b.*$/, '').trim() || 'per person'
+  const short = l.replace(/\(.*?\)/g, '').replace(/\b(incl|inclusive|excl|exclusive)\b.*$/, '').trim()
+  // Only a short "per <thing>" unit belongs on a tile; a free-text sentence would leak in as a description.
+  return /^per(\s+[\w-]+){1,2}$/.test(short) ? short : 'per person'
 }
 
 /** Unit for an activity: the dashboard's Per person / Per group setting (pricing.pricePerPerson) wins over the free-text label. */
 export function expUnit(e: { pricingLabel?: string; pricing?: { pricePerPerson?: boolean } }): string {
   const u = cardUnit(e.pricingLabel)
-  if (e.pricing?.pricePerPerson === false) return u === 'per person' ? 'per group' : u
+  // Group pricing is always "per group": the stored label can be a stale "per vehicle" from the old listings.
+  if (e.pricing?.pricePerPerson === false) return 'per group'
   if (e.pricing?.pricePerPerson === true) return u === 'per group' || u === 'per vehicle' ? 'per person' : u
   return u
 }
