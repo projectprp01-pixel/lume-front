@@ -12,7 +12,8 @@ import { getSpaFacilities, getSpaTimeSlots } from '../../api/endpoints'
 import { formatDayMonth, formatMinutes, formatPrice, formatTime12, spaDuration, withTaxNote } from '../../api/format'
 import { buildDays } from '../experiences/ExperienceDetail'
 import PriceText from '../../components/PriceText'
-import { useDiscounted } from '../../guest/AppConfig'
+import { useAppConfig, useDiscounted } from '../../guest/AppConfig'
+import { slotAfterCheckout, slotBeforeCheckin } from '../../guest/stayTimes'
 import icBack from '../../assets/nav/ic-back.svg'
 import icClock from '../../assets/home/ic-clock.svg'
 import icDot from '../../assets/home/ic-dot.svg'
@@ -34,6 +35,7 @@ export default function SpaDetail() {
   const { guest, guestId, booking } = useGuest()
   const cart = useTripCart()
   const discounted = useDiscounted()
+  const { settings: propertySettings } = useAppConfig()
 
   const { data: facilities, loading, error } = useFetch(() => getSpaFacilities(), [])
   const found = useMemo(() => {
@@ -145,7 +147,18 @@ export default function SpaDetail() {
   // Offer the treatment's own start times when it lists any (matching the spa's bookable slots).
   const allSlots = slotData ?? facility.timeSlots?.map((t) => ({ time: t, available: true, remaining: 0 })) ?? []
   const own = new Set((treatment.timeSlots ?? []).map((x) => x.startTime))
-  const slots = own.size > 0 && allSlots.some((s) => own.has(s.time)) ? allSlots.filter((s) => own.has(s.time)) : allSlots
+  const ownSlots = own.size > 0 && allSlots.some((s) => own.has(s.time)) ? allSlots.filter((s) => own.has(s.time)) : allSlots
+  // On the checkout day, slots that start after the property's checkout time are not offered.
+  // ...and slots that start before the check-in time are not offered on the arrival day.
+  const stayTimes = {
+    arrivalDate: booking?.arrivalDate,
+    checkoutDate: booking?.checkoutDate,
+    checkInTime: propertySettings?.checkInTime,
+    checkOutTime: propertySettings?.checkOutTime,
+  }
+  const slots = ownSlots.filter(
+    (s) => !slotAfterCheckout(stayTimes, dayIso, s.time, minutes ?? 0) && !slotBeforeCheckin(stayTimes, dayIso, s.time),
+  )
 
   // Places left in a slot after what's already in the cart for it (a spa's slots are shared by its treatments);
   // null = no count known (remaining 0 on an available slot only happens without live slot data).
@@ -336,7 +349,7 @@ export default function SpaDetail() {
                   <button
                     key={d.minutes}
                     className={`xd-slot ${durIdx === i ? 'xd-slot--active' : ''}`}
-                    onClick={() => setDurIdx(i)}
+                    onClick={() => { setDurIdx(i); setSlot('') }}
                   >
                     <span className="xd-slot__time">{formatMinutes(d.minutes)}</span>
                     <span className="xd-slot__avail">{formatPrice(discounted('spa', treatment._id as string, d.price ?? treatment.price ?? 0).price)}</span>

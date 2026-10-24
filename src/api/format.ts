@@ -153,12 +153,16 @@ export function formatTime12(t?: string): string {
 // "1 hr 30 min" from the numeric duration set in the dashboard; the free-text display string is only a
 // fallback because it can drift from the real duration.
 export function formatDuration(e: ApiExperience): string {
-  const d = e.duration
-  if (d?.value) {
-    const min = d.unit === 'hours' ? d.value * 60 : d.unit === 'days' ? d.value * 1440 : d.value
-    return formatMinutes(min)
-  }
+  const min = experienceMinutes(e)
+  if (min) return formatMinutes(min)
   return e.durationDisplayText || ''
+}
+
+/** Length of an activity in minutes from its structured duration (0 when only free text is set). */
+export function experienceMinutes(e: ApiExperience): number {
+  const d = e.duration
+  if (!d?.value) return 0
+  return d.unit === 'hours' ? d.value * 60 : d.unit === 'days' ? d.value * 1440 : d.value
 }
 
 /** 45 -> '45 min', 75 -> '1 hr 15 min', 120 -> '2 hr' */

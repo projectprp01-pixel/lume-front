@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNav } from '../../navigation/NavContext'
 import { useGuest } from '../../guest/GuestContext'
 import { useTripCart, type NewCartItem } from '../../cart/TripCart'
-import { useDiscounted } from '../../guest/AppConfig'
+import { useAppConfig, useDiscounted } from '../../guest/AppConfig'
+import { slotAfterCheckout, slotBeforeCheckin } from '../../guest/stayTimes'
 import PriceText from '../../components/PriceText'
 import BookBar from '../../components/BookBar'
 import PageShell from '../../components/PageShell'
 import { useFetch } from '../../api/useFetch'
 import { getExperienceById, getExperienceSlots } from '../../api/endpoints'
-import { expUnit, formatDayMonth, formatDuration, formatPrice, formatTime12, priceUnit, withTaxNote } from '../../api/format'
+import { expUnit, experienceMinutes, formatDayMonth, formatDuration, formatPrice, formatTime12, priceUnit, withTaxNote } from '../../api/format'
 import MediaStrip from '../../components/MediaStrip'
 import type { MediaItem } from '../../components/MediaLightbox'
 import icBack from '../../assets/nav/ic-back.svg'
@@ -61,6 +62,7 @@ export default function ExperienceDetail() {
   const { param: experienceId, navigate } = useNav()
   const { guest, guestId, booking } = useGuest()
   const discounted = useDiscounted()
+  const { settings: propertySettings } = useAppConfig()
   const cart = useTripCart()
 
   const { data: exp, loading, error } = useFetch(
@@ -219,12 +221,23 @@ export default function ExperienceDetail() {
   const description = exp.fullDescription || exp.shortDescription || ''
   const duration = formatDuration(exp)
 
-  const slotList: { time: string; available?: number; isAvailable: boolean }[] =
+  const allSlotList: { time: string; available?: number; isAvailable: boolean }[] =
     slotData?.slots ??
     (dayIso ? exp.timeSlots : [])
       ?.filter((t) => (t as { active?: boolean }).active !== false)
       .map((t) => ({ time: t.time, isAvailable: true })) ??
     []
+  // On the checkout day, slots that start after the property's checkout time are not offered.
+  // ...and slots that start before the check-in time are not offered on the arrival day.
+  const stayTimes = {
+    arrivalDate: booking?.arrivalDate,
+    checkoutDate: booking?.checkoutDate,
+    checkInTime: propertySettings?.checkInTime,
+    checkOutTime: propertySettings?.checkOutTime,
+  }
+  const slotList = allSlotList.filter(
+    (s) => !slotAfterCheckout(stayTimes, dayIso, s.time, experienceMinutes(exp)) && !slotBeforeCheckin(stayTimes, dayIso, s.time),
+  )
   // Places left in a slot after what's already in the cart for it (null = no count known).
   const placesLeft = (s: { time: string; available?: number }) =>
     typeof s.available === 'number' ? s.available - cart.heldOn('experience', experienceId ?? undefined, dayIso, s.time) : null

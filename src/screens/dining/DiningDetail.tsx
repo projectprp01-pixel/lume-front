@@ -9,7 +9,8 @@ import DesktopNav from '../../components/DesktopNav'
 import { useNav } from '../../navigation/NavContext'
 import { useGuest } from '../../guest/GuestContext'
 import { useTripCart, type NewCartItem } from '../../cart/TripCart'
-import { useDiscounted } from '../../guest/AppConfig'
+import { useAppConfig, useDiscounted } from '../../guest/AppConfig'
+import { slotAfterCheckout, slotBeforeCheckin } from '../../guest/stayTimes'
 import PriceText from '../../components/PriceText'
 import { useFetch } from '../../api/useFetch'
 import { getRestaurants, getDiningAvailability } from '../../api/endpoints'
@@ -84,6 +85,7 @@ export default function DiningDetail() {
   const { param: facilityId, navigate } = useNav()
   const { guestId, booking } = useGuest()
   const discounted = useDiscounted()
+  const { settings: propertySettings } = useAppConfig()
   const cart = useTripCart()
 
   const { data: all, loading, error } = useFetch(() => getRestaurants(), [])
@@ -161,7 +163,20 @@ export default function DiningDetail() {
   const menus = (facility.menus ?? []).filter((m) => m.fileUrl)
   const facilityAddons = facility.addons ?? []
 
-  const slots = (facility.slots ?? []).filter((s) => s.active !== false)
+  // On the checkout day, slots that start after the property's checkout time are not offered.
+  // ...and slots that start before the check-in time are not offered on the arrival day.
+  const stayTimes = {
+    arrivalDate: booking?.arrivalDate,
+    checkoutDate: booking?.checkoutDate,
+    checkInTime: propertySettings?.checkInTime,
+    checkOutTime: propertySettings?.checkOutTime,
+  }
+  const slots = (facility.slots ?? []).filter(
+    (s) =>
+      s.active !== false &&
+      !slotAfterCheckout(stayTimes, dayIso, s.endTime || s.startTime) &&
+      !slotBeforeCheckin(stayTimes, dayIso, s.startTime),
+  )
   // Only the slots the property saved: no slots means no "Select a Time" step (opening hours are not a slot).
   const slotOptions = slots.map(slotLabel)
 
