@@ -195,6 +195,7 @@ export type ApiStage = 'prestay' | 'instay' | 'both'
 export type ApiGuestApp = {
   pageEnabled?: { experiences?: boolean; dining?: boolean; requests?: boolean }
   heroImage?: string
+  homeSectionOrder?: string[]
   homeToggles?: {
     quickActions?: boolean
     expCallout?: boolean
@@ -228,7 +229,7 @@ export type ApiGuestApp = {
     sourceType: 'spa' | 'experience' | 'dining'
     showViewAll?: boolean
     enabled?: boolean
-    items: { id: string; sourceId: string; badge?: string }[]
+    items: { id: string; sourceId: string; badge?: string; image?: string }[]
   }[]
   diningHero?: {
     prestay?: { image?: string; heading?: string; subtext?: string }

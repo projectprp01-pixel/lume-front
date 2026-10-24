@@ -110,7 +110,7 @@ export default function ExperiencesLanding() {
 
   // Spa treatments as cards. `onlyId` picks one treatment (curated section); otherwise the first
   // facility's treatments — the Ayurveda Centre section that opens the landing in Figma.
-  const spaCards = (onlyId?: string): Card[] => {
+  const spaCards = (onlyId?: string, imageOverride?: string): Card[] => {
     const facilities = onlyId ? (spa ?? []) : spa?.slice(0, 1) ?? []
     const out: Card[] = []
     for (const facility of facilities) {
@@ -121,7 +121,7 @@ export default function ExperiencesLanding() {
           const priced = discounted('spa', t._id, t.price ?? 0)
           out.push({
             id: t._id ?? facility._id, // the treatment, so the card opens its own detail page
-            image: t.imageUrl || t.image || fallback,
+            image: imageOverride || t.imageUrl || t.image || fallback,
             title: t.name,
             description: t.description || '',
             price: t.price ? <PriceText priced={priced} unit={priceUnit(t.pricingLabel)} /> : 'On request',
@@ -146,7 +146,7 @@ export default function ExperiencesLanding() {
       description:
         r.facilityType === 'intimate_dining'
           ? (r.mealTimes ?? []).map((m) => m.charAt(0).toUpperCase() + m.slice(1)).join(', ')
-          : r.subtitle || (r.cuisine ?? []).join(', '),
+          : (r.cuisine ?? []).join(', ') || r.subtitle || '',
       price: r.price ? <PriceText priced={priced} unit={priceUnit(r.pricingLabel)} /> : 'View details',
       popular: false,
       free: false,
@@ -173,7 +173,7 @@ export default function ExperiencesLanding() {
             const e = data?.find((x) => x._id === it.sourceId)
             if (e) cards.push(expCard(e, cards.length, it.badge || undefined))
           } else if (sec.sourceType === 'spa') {
-            for (const c of spaCards(it.sourceId)) cards.push({ ...c, badge: it.badge || undefined })
+            for (const c of spaCards(it.sourceId, it.image)) cards.push({ ...c, badge: it.badge || undefined })
           } else {
             const r = restaurants?.find((x) => x._id === it.sourceId)
             if (r) cards.push({ ...diningCard(r), badge: it.badge || undefined })

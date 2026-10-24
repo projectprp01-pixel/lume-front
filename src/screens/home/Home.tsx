@@ -11,7 +11,7 @@ import carouselDots from '../../assets/home/carousel-dots.svg'
 import expElectricTrails from '../../assets/home/exp-electric-trails.png'
 import expBylakuppe from '../../assets/home/exp-bylakuppe.png'
 
-import { useMemo, useRef, useState, type ReactNode } from 'react'
+import { Fragment, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useDragScroll } from '../../components/useDragScroll'
 import DesktopNav from '../../components/DesktopNav'
 import InfoSheet, { type SheetKind } from '../../components/InfoSheets'
@@ -43,6 +43,7 @@ import {
 } from '../../api/endpoints'
 import { expUnit, formatDayMonth, formatPriceWithUnit, priceUnit, isToday, minutesOfDay } from '../../api/format'
 import type { ApiExperience, ApiGuestApp } from '../../api/types'
+import { resolveHomeOrder, type HomeSectionKey } from './homeOrder'
 import './Home.css'
 
 const HOME_EXP_FALLBACKS = [expElectricTrails, expBylakuppe]
@@ -211,7 +212,7 @@ export default function Home() {
 
     const source = spotlight && spotlight.length > 0 ? spotlight : (allExp ?? [])
     if (source.length === 0) return []
-    return source.slice(0, 4).map((e, i) => expCard(e, i, null))
+    return source.slice(0, 5).map((e, i) => expCard(e, i, null))
   }, [spotlight, allExp, spa, cfg, discounted])
 
   // Gallery collage — only the photos the property starred in Settings → Gallery (the Gallery page
@@ -292,6 +293,197 @@ export default function Home() {
       .map((it) => ({ ...it, time: it.status === 'now' ? 'Now' : it.time.toLowerCase() }))
   }, [expBookings, spaBookings, diningBookings])
 
+  const homeBlocks: Record<HomeSectionKey, ReactNode> = {
+      quickActions: cfg.home.quickActions && (
+        <nav className="quick-actions" aria-label="Quick actions" ref={quickRef}>
+          {quickActions
+            .filter((a) => {
+              const key = QA_KEY[a.label as keyof typeof QA_KEY]
+              if (key === 'inRoomDining' && !cfg.inRoomOrderingEnabled) return false
+              return !cfg.configured || cfg.quickActionOn(key)
+            })
+            .map((a) => {
+            // Map the quick action to a screen or popup where one exists (others are inert for now).
+            const target =
+              a.label === 'Transport'
+                ? 'transport'
+                : a.label === 'Facilities'
+                  ? 'facilities'
+                  : a.label === 'In-room Dining'
+                    ? 'inroom-dining'
+                    : null
+            const sheet: SheetKind | null =
+              a.label === 'WiFi Details'
+                ? 'wifi'
+                : a.label === 'Directory'
+                  ? 'directory'
+                  : a.label === 'Directions'
+                    ? 'directions'
+                    : null
+            return (
+              <button
+                className="quick-action"
+                key={a.label}
+                onClick={
+                  target ? () => navigate(target) : sheet ? () => setSheet(sheet) : undefined
+                }
+              >
+                <img className="quick-action__icon" src={a.icon} alt="" />
+                <span className="quick-action__label">{a.label}</span>
+              </button>
+            )
+          })}
+        </nav>
+        ),
+      expCallout: cfg.home.expCallout && experiences.length > 0 && (
+        <section
+          className="experiences"
+          style={{ backgroundImage: `url(${experiencesBg})` }}
+        >
+          <div className="section">
+            <SectionHeading
+              title={cfg.guestApp.expCalloutTitle?.trim() || 'Experiences'}
+              action={cfg.pageEnabled.experiences ? 'View all →' : undefined}
+              onAction={() => navigate('experiences-all')}
+            />
+            <ScrollRow className="experiences__list">
+              {experiences.map((exp) => (
+                <article
+                  className="exp-card"
+                  key={exp.id ?? exp.title}
+                  onClick={() => exp.id && (exp.spa ? navigate('spa') : navigate('experience-detail', exp.id))}
+                  style={exp.id ? { cursor: 'pointer' } : undefined}
+                >
+                  <div className="exp-card__media">
+                    <img src={exp.image} alt={exp.title} />
+                    {exp.badge && (
+                      <span className="exp-card__badge">{exp.badge}</span>
+                    )}
+                  </div>
+                  <div className="exp-card__body">
+                    <h3 className="font-display">{exp.title}</h3>
+                    <div className="exp-card__meta">
+                      {exp.time && (
+                        <>
+                          <span className="exp-card__meta-item">
+                            <img src={icClock} alt="" />
+                            {exp.time}
+                          </span>
+                          <img className="dot" src={icDot} alt="" />
+                        </>
+                      )}
+                      <span>{exp.price}</span>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </ScrollRow>
+          </div>
+        </section>
+        ),
+      todaysPlan: cfg.home.todaysPlan && todaysPlan.length > 0 && (
+        <section className="section plan-section">
+          <img className="plan__leaf" src={planLeaf} alt="" />
+          <SectionHeading title="Today’s Plan" />
+          <div className="plan">
+            {todaysPlan.map((p, i) => (
+              <div className="plan__item" key={`${p.title}-${i}`}>
+                <div
+                  className={`plan__card ${
+                    p.status === 'upcoming' ? 'plan__card--muted' : ''
+                  }`}
+                >
+                  <div className="plan__card-head">
+                    <h4>{p.title}</h4>
+                    <p>{p.detail}</p>
+                  </div>
+                  {p.meta && <span className="plan__meta">{p.meta}</span>}
+                </div>
+                <div className="plan__marker">
+                  <img src={icTimelineDot} alt="" />
+                  <span
+                    className={p.status === 'now' ? 'plan__time--now' : ''}
+                  >
+                    {p.time}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+        ),
+      spotlight:
+        !cfg.configured ? (
+        <div className="spa-loyalty">
+          {showSpaBanner && (
+          <section className="ayurveda" style={{ backgroundImage: `url(${ayurveda})` }}>
+            <div className="ayurveda__overlay" />
+            <div className="ayurveda__content">
+              <h2 className="font-display ayurveda__title">Ayurveda Centre</h2>
+              <p className="ayurveda__desc">
+                Our expert masseurs and masseuses harness the ancient secrets of
+                the world's oldest healing system to rejuvenate, regenerate and
+                revitalize you
+              </p>
+              <button className="btn btn--primary" onClick={() => navigate('spa')}>View Details →</button>
+            </div>
+          </section>
+          )}
+
+          <div className="section loyalty-wrap">
+            <div className="loyalty">
+              <div className="loyalty__text">
+                <h3 className="font-display">Loyalty Programme</h3>
+                <p>Get 20% off on all experiences</p>
+              </div>
+              <div className="loyalty__media" style={{ backgroundImage: `url(${loyalty})` }} />
+            </div>
+            <img className="carousel-dots" src={carouselDots} alt="" />
+          </div>
+        </div>
+      ) : (
+            cfg.home.spotlight &&
+              spotlightItems.filter((sp) => !(spaHidden && SPOTLIGHT_TARGET[sp.ctaTarget] === 'spa')).map((sp) => (
+                <div className="spa-loyalty" key={sp.id}>
+                  <section className="ayurveda" style={{ backgroundImage: `url(${sp.image || ayurveda})` }}>
+                    <div className="ayurveda__overlay" />
+                    <div className="ayurveda__content">
+                      <h2 className="font-display ayurveda__title">{sp.title}</h2>
+                      <p className="ayurveda__desc">{sp.body}</p>
+                      {SPOTLIGHT_TARGET[sp.ctaTarget] && (
+                        <button className="btn btn--primary" onClick={() => navigate(SPOTLIGHT_TARGET[sp.ctaTarget])}>
+                          View Details →
+                        </button>
+                      )}
+                    </div>
+                  </section>
+                </div>
+              ))
+      ),
+      events: cfg.configured && cfg.home.events && eventItems.length > 0 && (
+              <EventCarousel
+                items={eventItems.map((ev) => ({ id: ev.id, title: ev.title, subtext: ev.subtext, image: ev.image || loyalty }))}
+                onOpen={(id) => {
+                  const ev = eventItems.find((e) => e.id === id)
+                  if (ev) openEvent(ev)
+                }}
+              />
+            ),
+      gallery: cfg.home.gallery && gallery.length > 0 && (
+        <section className="section">
+          <SectionHeading title="Gallery" action="View all →" onAction={() => navigate('gallery')} />
+          <div className="gallery">
+            {gallery.map((src, i) => (
+              <div className={`gallery__item gallery__item--${i + 1}`} key={i}>
+                <img src={src} alt="" />
+              </div>
+            ))}
+          </div>
+        </section>
+        ),
+  }
+  const homeOrder = resolveHomeOrder(cfg.guestApp.homeSectionOrder)
+
   return (
     <div className="home">
       <MobileTopBar />
@@ -349,205 +541,10 @@ export default function Home() {
           )}
         </section>
 
-        {/* Quick actions */}
-        {cfg.home.quickActions && (
-        <nav className="quick-actions" aria-label="Quick actions" ref={quickRef}>
-          {quickActions
-            .filter((a) => {
-              const key = QA_KEY[a.label as keyof typeof QA_KEY]
-              if (key === 'inRoomDining' && !cfg.inRoomOrderingEnabled) return false
-              return !cfg.configured || cfg.quickActionOn(key)
-            })
-            .map((a) => {
-            // Map the quick action to a screen or popup where one exists (others are inert for now).
-            const target =
-              a.label === 'Transport'
-                ? 'transport'
-                : a.label === 'Facilities'
-                  ? 'facilities'
-                  : a.label === 'In-room Dining'
-                    ? 'inroom-dining'
-                    : null
-            const sheet: SheetKind | null =
-              a.label === 'WiFi Details'
-                ? 'wifi'
-                : a.label === 'Directory'
-                  ? 'directory'
-                  : a.label === 'Directions'
-                    ? 'directions'
-                    : null
-            return (
-              <button
-                className="quick-action"
-                key={a.label}
-                onClick={
-                  target ? () => navigate(target) : sheet ? () => setSheet(sheet) : undefined
-                }
-              >
-                <img className="quick-action__icon" src={a.icon} alt="" />
-                <span className="quick-action__label">{a.label}</span>
-              </button>
-            )
-          })}
-        </nav>
-        )}
+        {homeOrder.map((k) => (
+          <Fragment key={k}>{homeBlocks[k]}</Fragment>
+        ))}
 
-        {/* Experiences */}
-        {cfg.home.expCallout && experiences.length > 0 && (
-        <section
-          className="experiences"
-          style={{ backgroundImage: `url(${experiencesBg})` }}
-        >
-          <div className="section">
-            <SectionHeading
-              title={cfg.guestApp.expCalloutTitle?.trim() || 'Experiences'}
-              action={cfg.pageEnabled.experiences ? 'View all →' : undefined}
-              onAction={() => navigate('experiences-all')}
-            />
-            <ScrollRow className="experiences__list">
-              {experiences.map((exp) => (
-                <article
-                  className="exp-card"
-                  key={exp.id ?? exp.title}
-                  onClick={() => exp.id && (exp.spa ? navigate('spa') : navigate('experience-detail', exp.id))}
-                  style={exp.id ? { cursor: 'pointer' } : undefined}
-                >
-                  <div className="exp-card__media">
-                    <img src={exp.image} alt={exp.title} />
-                    {exp.badge && (
-                      <span className="exp-card__badge">{exp.badge}</span>
-                    )}
-                  </div>
-                  <div className="exp-card__body">
-                    <h3 className="font-display">{exp.title}</h3>
-                    <div className="exp-card__meta">
-                      {exp.time && (
-                        <>
-                          <span className="exp-card__meta-item">
-                            <img src={icClock} alt="" />
-                            {exp.time}
-                          </span>
-                          <img className="dot" src={icDot} alt="" />
-                        </>
-                      )}
-                      <span>{exp.price}</span>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </ScrollRow>
-          </div>
-        </section>
-        )}
-
-        {/* Today's Plan — only shown when the guest has bookings today */}
-        {cfg.home.todaysPlan && todaysPlan.length > 0 && (
-        <section className="section plan-section">
-          <img className="plan__leaf" src={planLeaf} alt="" />
-          <SectionHeading title="Today’s Plan" />
-          <div className="plan">
-            {todaysPlan.map((p, i) => (
-              <div className="plan__item" key={`${p.title}-${i}`}>
-                <div
-                  className={`plan__card ${
-                    p.status === 'upcoming' ? 'plan__card--muted' : ''
-                  }`}
-                >
-                  <div className="plan__card-head">
-                    <h4>{p.title}</h4>
-                    <p>{p.detail}</p>
-                  </div>
-                  {p.meta && <span className="plan__meta">{p.meta}</span>}
-                </div>
-                <div className="plan__marker">
-                  <img src={icTimelineDot} alt="" />
-                  <span
-                    className={p.status === 'now' ? 'plan__time--now' : ''}
-                  >
-                    {p.time}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-        )}
-
-        {/* Spotlight banners + event cards. Until the property configures its own in the dashboard
-            builder, the built-in Ayurveda Centre / Loyalty Programme pair shows. */}
-        {!cfg.configured ? (
-        <div className="spa-loyalty">
-          {showSpaBanner && (
-          <section className="ayurveda" style={{ backgroundImage: `url(${ayurveda})` }}>
-            <div className="ayurveda__overlay" />
-            <div className="ayurveda__content">
-              <h2 className="font-display ayurveda__title">Ayurveda Centre</h2>
-              <p className="ayurveda__desc">
-                Our expert masseurs and masseuses harness the ancient secrets of
-                the world's oldest healing system to rejuvenate, regenerate and
-                revitalize you
-              </p>
-              <button className="btn btn--primary" onClick={() => navigate('spa')}>View Details →</button>
-            </div>
-          </section>
-          )}
-
-          <div className="section loyalty-wrap">
-            <div className="loyalty">
-              <div className="loyalty__text">
-                <h3 className="font-display">Loyalty Programme</h3>
-                <p>Get 20% off on all experiences</p>
-              </div>
-              <div className="loyalty__media" style={{ backgroundImage: `url(${loyalty})` }} />
-            </div>
-            <img className="carousel-dots" src={carouselDots} alt="" />
-          </div>
-        </div>
-        ) : (
-          <>
-            {cfg.home.spotlight &&
-              spotlightItems.filter((sp) => !(spaHidden && SPOTLIGHT_TARGET[sp.ctaTarget] === 'spa')).map((sp) => (
-                <div className="spa-loyalty" key={sp.id}>
-                  <section className="ayurveda" style={{ backgroundImage: `url(${sp.image || ayurveda})` }}>
-                    <div className="ayurveda__overlay" />
-                    <div className="ayurveda__content">
-                      <h2 className="font-display ayurveda__title">{sp.title}</h2>
-                      <p className="ayurveda__desc">{sp.body}</p>
-                      {SPOTLIGHT_TARGET[sp.ctaTarget] && (
-                        <button className="btn btn--primary" onClick={() => navigate(SPOTLIGHT_TARGET[sp.ctaTarget])}>
-                          View Details →
-                        </button>
-                      )}
-                    </div>
-                  </section>
-                </div>
-              ))}
-            {/* Events swipe sideways, one banner at a time, with page dots (Figma Home 6). */}
-            {cfg.home.events && eventItems.length > 0 && (
-              <EventCarousel
-                items={eventItems.map((ev) => ({ id: ev.id, title: ev.title, subtext: ev.subtext, image: ev.image || loyalty }))}
-                onOpen={(id) => {
-                  const ev = eventItems.find((e) => e.id === id)
-                  if (ev) openEvent(ev)
-                }}
-              />
-            )}
-          </>
-        )}
-
-        {/* Gallery */}
-        {cfg.home.gallery && gallery.length > 0 && (
-        <section className="section">
-          <SectionHeading title="Gallery" action="View all →" onAction={() => navigate('gallery')} />
-          <div className="gallery">
-            {gallery.map((src, i) => (
-              <div className={`gallery__item gallery__item--${i + 1}`} key={i}>
-                <img src={src} alt="" />
-              </div>
-            ))}
-          </div>
-        </section>
-        )}
       </main>
 
       <Footer />
