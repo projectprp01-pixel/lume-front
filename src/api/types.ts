@@ -319,9 +319,12 @@ export type ApiTransportOffering = {
   desc?: string
   structure: 'daily' | 'p2p' | 'custom'
   flatRate?: boolean
+  // Full trip cab only: 'calculated' (default) = sightseeing rate x nights + pickup fare; 'custom' = fixed price
+  // per car / pickup city / nights, held in vehiclePricing[].cities
+  pricingMode?: 'calculated' | 'custom'
   published?: boolean
   included?: string[]
-  vehiclePricing?: { vehicleId: string; price: number }[]
+  vehiclePricing?: { vehicleId: string; price: number; cities?: { city: string; tiers: { nights: number; price: number }[] }[] }[]
   // Vehicles the property allows on this offering (pricing rows can exist for others)
   eligibleVehicles?: string[]
   // Slots of other offerings sold as an add-on to this one

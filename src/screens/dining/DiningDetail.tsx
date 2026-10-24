@@ -14,7 +14,7 @@ import PriceText from '../../components/PriceText'
 import { useFetch } from '../../api/useFetch'
 import { getRestaurants, getDiningAvailability } from '../../api/endpoints'
 import type { ApiRestaurant } from '../../api/types'
-import { formatDayMonth, formatPrice, formatTime12 } from '../../api/format'
+import { formatDayMonth, formatPrice, formatTime12, withTaxNote } from '../../api/format'
 import icBack from '../../assets/nav/ic-back.svg'
 import lanterns from '../../assets/dining/lanterns.png'
 import './DiningDetail.css'
@@ -232,7 +232,7 @@ export default function DiningDetail() {
       setPaid(payableTotal > 0)
       setDone(true)
     } else if (result.status === 'dismissed') {
-      setBookError('Payment was not completed. Your items are still in the cart. Tap Pay now to try again.')
+      setBookError('Payment was not completed, so nothing has been booked. Your items are still in your cart.')
     } else setBookError(result.message)
   }
 
@@ -262,7 +262,7 @@ export default function DiningDetail() {
             {listPrice > 0 && (
               <p className="dd-price">
                 <span className="font-display dd-price__amount">{priced.original != null ? <PriceText priced={priced} /> : formatPrice(unitPrice)}</span>{' '}
-                <span className="dd-price__unit">{perPerson ? 'per person' : facility.pricingLabel || 'per booking'}</span>
+                <span className="dd-price__unit">{withTaxNote(perPerson ? 'per person' : facility.pricingLabel || 'per booking')}</span>
               </p>
             )}
             {description && (
@@ -445,9 +445,7 @@ export default function DiningDetail() {
                 ? 'Processing…'
                 : soldOut || !dayBookable
                   ? 'Unavailable'
-                  : cart.hasUnpaid
-                    ? 'Pay now'
-                    : total + cart.total > 0
+                  : total + cart.total > 0
                       ? 'Book & Pay'
                       : isIntimate
                         ? 'Book Now'
