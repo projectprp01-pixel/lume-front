@@ -43,6 +43,11 @@ export function priceUnit(label?: string): string {
   return ` ${label?.trim() || 'per person'}`
 }
 
+/** Adds "(including taxes)" after a price unit on detail pages, unless the property's own label already says so. */
+export function withTaxNote(unit: string): string {
+  return /tax/i.test(unit) ? unit : `${unit} (including taxes)`
+}
+
 /** "₹3,000 Per group" — the amount plus the property's unit label (defaults to "per person"); 0 reads "Complimentary". */
 export function formatPriceWithUnit(amount?: number, label?: string, currency = 'INR'): string {
   if (amount == null || amount === 0) return 'Complimentary'

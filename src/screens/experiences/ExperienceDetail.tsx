@@ -8,7 +8,7 @@ import BookBar from '../../components/BookBar'
 import PageShell from '../../components/PageShell'
 import { useFetch } from '../../api/useFetch'
 import { getExperienceById, getExperienceSlots } from '../../api/endpoints'
-import { expUnit, formatDayMonth, formatDuration, formatPrice, formatTime12, priceUnit } from '../../api/format'
+import { expUnit, formatDayMonth, formatDuration, formatPrice, formatTime12, priceUnit, withTaxNote } from '../../api/format'
 import MediaStrip from '../../components/MediaStrip'
 import type { MediaItem } from '../../components/MediaLightbox'
 import icBack from '../../assets/nav/ic-back.svg'
@@ -261,11 +261,11 @@ export default function ExperienceDetail() {
           {unitPrice === 0 ? (
             'Complimentary'
           ) : priced.original != null ? (
-            <PriceText priced={priced} unit={priceUnit(expUnit(exp))} currency={currency} />
+            <PriceText priced={priced} unit={withTaxNote(priceUnit(expUnit(exp)))} currency={currency} />
           ) : (
             <>
               <span className="xd-price__amt">{formatPrice(priced.price, currency)}</span>
-              <span className="xd-price__unit">{priceUnit(expUnit(exp))}</span>
+              <span className="xd-price__unit">{withTaxNote(priceUnit(expUnit(exp)))}</span>
             </>
           )}
         </p>

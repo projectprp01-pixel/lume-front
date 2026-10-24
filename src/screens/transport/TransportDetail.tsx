@@ -8,7 +8,7 @@ import { useFetch } from '../../api/useFetch'
 import { getGuestTransport } from '../../api/endpoints'
 import { useTripCart, type NewCartItem } from '../../cart/TripCart'
 import type { ApiTransportOffering, ApiVehicle } from '../../api/types'
-import { formatPrice, stayDaysNights } from '../../api/format'
+import { formatPrice, stayDaysNights, withTaxNote } from '../../api/format'
 import { vehicleRows, priceSuffix, isCustomFullTrip, customTierPrice, customFromPrice } from './rows'
 import icTransport from '../../assets/home/ic-transport.svg'
 import './Transport.css'
@@ -389,9 +389,9 @@ export default function TransportDetail() {
                             <>
                               - {formatPrice(shownPrice(vehicle._id, price))}{' '}
                               {netShown(vehicle._id) ? (
-                                <span className="tr-car__per">{city ? '' : 'onwards '}for {stayDaysNights(tripNights)}</span>
+                                <span className="tr-car__per">{city ? '' : 'onwards '}for {stayDaysNights(tripNights)} (including taxes)</span>
                               ) : (
-                                perLabel && !(isP2P && city && cityFare(vehicle._id) != null) && <span className="tr-car__per">{perLabel}</span>
+                                perLabel && !(isP2P && city && cityFare(vehicle._id) != null) && <span className="tr-car__per">{withTaxNote(perLabel)}</span>
                               )}
                             </>
                             )}

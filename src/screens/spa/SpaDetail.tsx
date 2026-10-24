@@ -9,7 +9,7 @@ import { useGuest } from '../../guest/GuestContext'
 import { useTripCart, type NewCartItem } from '../../cart/TripCart'
 import { useFetch } from '../../api/useFetch'
 import { getSpaFacilities, getSpaTimeSlots } from '../../api/endpoints'
-import { formatDayMonth, formatMinutes, formatPrice, formatTime12, spaDuration } from '../../api/format'
+import { formatDayMonth, formatMinutes, formatPrice, formatTime12, spaDuration, withTaxNote } from '../../api/format'
 import { buildDays } from '../experiences/ExperienceDetail'
 import PriceText from '../../components/PriceText'
 import { useDiscounted } from '../../guest/AppConfig'
@@ -276,11 +276,11 @@ export default function SpaDetail() {
             {listPrice === 0 ? (
               'Complimentary'
             ) : priced.original != null ? (
-              <PriceText priced={priced} unit={` ${(treatment.pricingLabel || 'per person').toLowerCase()}`} />
+              <PriceText priced={priced} unit={withTaxNote(` ${(treatment.pricingLabel || 'per person').toLowerCase()}`)} />
             ) : (
               <>
                 <span className="xd-price__amt">{formatPrice(unitPrice)}</span>
-                <span className="xd-price__unit"> {(treatment.pricingLabel || 'per person').toLowerCase()}</span>
+                <span className="xd-price__unit">{withTaxNote(` ${(treatment.pricingLabel || 'per person').toLowerCase()}`)}</span>
               </>
             )}
           </p>
