@@ -9,6 +9,7 @@ import {
 } from 'react'
 import { getBookingByToken } from '../api/endpoints'
 import type { ApiBooking, ApiTokenResult } from '../api/types'
+import { identifyGuest } from '../analytics'
 
 // The guest app is opened from a per-booking link that carries the Guest.bookingToken from
 // lume-backend — the property app's form `/g/<token>` (https://app.lume-cxm.com/g/<token>), or the
@@ -73,6 +74,19 @@ export function GuestProvider({ children }: { children: ReactNode }) {
       cancelled = true
     }
   }, [token])
+
+  // Tie all PostHog events to this specific guest.
+  useEffect(() => {
+    if (!result?.guest?.id) return
+    identifyGuest(result.guest.id, {
+      name: result.guest.fullName,
+      email: result.guest.email,
+      phone: result.guest.mobileNumber,
+      propertyName: result.booking?.propertyName,
+      arrivalDate: result.booking?.arrivalDate?.slice(0, 10),
+      checkoutDate: result.booking?.checkoutDate?.slice(0, 10),
+    })
+  }, [result])
 
   const refresh = useCallback(async () => {
     if (!token) return

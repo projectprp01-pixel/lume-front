@@ -3,6 +3,7 @@ import { NavProvider, useNav, type Screen } from './navigation/NavContext'
 import { GuestProvider, useGuest } from './guest/GuestContext'
 import { AppConfigProvider, useAppConfig } from './guest/AppConfig'
 import { stayPhase } from './guest/stayPhase'
+import { trackScreen } from './analytics'
 import Home from './screens/home/Home'
 import ExperiencesLanding from './screens/experiences/ExperiencesLanding'
 import Experiences from './screens/experiences/Experiences'
@@ -52,6 +53,9 @@ function CurrentScreen() {
   useEffect(() => {
     if (blocked) navigate('home')
   }, [blocked, navigate])
+  useEffect(() => {
+    if (!blocked) trackScreen(screen)
+  }, [screen, blocked])
   if (blocked) return null
   switch (screen) {
     case 'experiences':
