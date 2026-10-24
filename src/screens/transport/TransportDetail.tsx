@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type CSSProperties } from 'react'
 import ScreenChrome from '../../components/ScreenChrome'
 import ScreenTitle from '../../components/ScreenTitle'
 import BookBar from '../../components/BookBar'
@@ -9,7 +9,7 @@ import { getGuestTransport } from '../../api/endpoints'
 import { useTripCart, type NewCartItem } from '../../cart/TripCart'
 import type { ApiTransportOffering, ApiVehicle } from '../../api/types'
 import { formatPrice, stayDaysNights } from '../../api/format'
-import { vehicleRows, priceSuffix } from './rows'
+import { vehicleRows, priceSuffix, isCustomFullTrip, customTierPrice, customFromPrice } from './rows'
 import icTransport from '../../assets/home/ic-transport.svg'
 import './Transport.css'
 
@@ -44,6 +44,9 @@ function dayList(arrivalIso?: string, checkoutIso?: string) {
 // "5" -> "up to 5 guests"; free text such as "Up to 3 guests" keeps its wording (lower-cased like Figma).
 const capacityText = (c: string) => (/^\d+$/.test(c.trim()) ? `up to ${c.trim()} guests` : c.charAt(0).toLowerCase() + c.slice(1))
 
+// Plain text-link look for the inline "Contact the property" actions.
+const linkBtn: CSSProperties = { background: 'none', border: 0, padding: 0, font: 'inherit', color: 'inherit', textDecoration: 'underline', cursor: 'pointer' }
+
 type PickLine = {
   vehicleId: string
   quantity: number
@@ -75,7 +78,7 @@ function CityField({ label, cities, city, setCity, disabled }: {
 }
 
 export default function TransportDetail() {
-  const { param } = useNav()
+  const { param, navigate } = useNav()
   const { guestId, booking } = useGuest()
   const { data, loading, error } = useFetch(
     () => getGuestTransport(guestId as string),
@@ -116,20 +119,22 @@ export default function TransportDetail() {
   const sources = useMemo(() => (data?.settings?.offerings ?? []).filter((o) => o.structure !== 'custom'), [data])
   const sightseeing = useMemo(() => sources.find((o) => o.structure === 'daily' && !o.flatRate), [sources])
   const pickupOffering = useMemo(() => sources.find((o) => o.structure === 'p2p'), [sources])
-  const vehicleOptions = useMemo(
-    () => (offering ? vehicleRows(offering, vehicles, sightseeing, pickupOffering) : []),
-    [offering, vehicles, sightseeing, pickupOffering],
-  )
   // Nights of the stay: from the server (matches the booking), else counted from the dates.
   const stayNights = useMemo(() => {
     if (data?.nights != null) return Math.max(1, data.nights)
     if (!booking?.arrivalDate || !booking?.checkoutDate) return 1
     return Math.max(1, Math.round((new Date(booking.checkoutDate).getTime() - new Date(booking.arrivalDate).getTime()) / 86400000))
   }, [data, booking])
+  const vehicleOptions = useMemo(
+    () => (offering ? vehicleRows(offering, vehicles, sightseeing, pickupOffering, stayNights) : []),
+    [offering, vehicles, sightseeing, pickupOffering, stayNights],
+  )
 
   const isDaily = offering?.structure === 'daily' && !offering?.flatRate
   const isFlat = offering?.structure === 'daily' && !!offering?.flatRate
   const isP2P = offering?.structure === 'p2p'
+  // Full trip with the property's own fixed prices (per car, city and nights of the stay)
+  const isCustom = isCustomFullTrip(offering)
   // Full trip is charged per night of the stay.
   const tripNights = stayNights
   const perLabel = offering ? priceSuffix(offering) : ''
@@ -146,11 +151,18 @@ export default function TransportDetail() {
     cityOptions.find((c) => c.name === cityName)?.vehiclePrices?.find((vp) => vp.vehicleId === vehicleId)?.price
   const cityFare = (vehicleId: string) => fareIn(city, vehicleId)
   // Full trip: a car with no pickup & drop-off fare from the chosen city can't be booked from there.
-  const notFromHere = (vehicleId: string) => isFlat && !!city && !((cityFare(vehicleId) ?? 0) > 0)
+  // Custom full trip: a car with no fixed price for this city and stay length is contact-only, never bookable.
+  const customPrice = (vehicleId: string) =>
+    offering ? (city ? customTierPrice(offering, vehicleId, city, stayNights) : customFromPrice(offering, vehicleId, stayNights)) : undefined
+  const contactOnly = (vehicleId: string) => isCustom && !customPrice(vehicleId)
+  const notFromHere = (vehicleId: string) =>
+    isCustom ? contactOnly(vehicleId) : isFlat && !!city && !((cityFare(vehicleId) ?? 0) > 0)
   // Choosing another city drops any picked car that has no fare from it.
   const pickCity = (name: string) => {
     setCity(name)
-    if (isFlat) setQtys((q) => Object.fromEntries(Object.entries(q).filter(([id]) => (fareIn(name, id) ?? 0) > 0 || !name)))
+    if (isCustom) {
+      setQtys((q) => Object.fromEntries(Object.entries(q).filter(([id]) => !name || (offering && customTierPrice(offering, id, name, stayNights)))))
+    } else if (isFlat) setQtys((q) => Object.fromEntries(Object.entries(q).filter(([id]) => (fareIn(name, id) ?? 0) > 0 || !name)))
   }
   const addonFare = (vehicleId: string, qty: number) => (hasAddon && addonOn && city ? (cityFare(vehicleId) ?? 0) * qty : 0)
   // Pickup & drop is priced per city: "from" the lowest fare until a city is chosen, then that city's fare.
@@ -163,8 +175,10 @@ export default function TransportDetail() {
     return fares.length ? Math.min(...fares) : 0
   }
   const transferFor = (vehicleId: string) => (city ? (cityFare(vehicleId) ?? 0) : lowestFare(vehicleId))
-  const tripNet = (vehicleId: string, base: number) => base * tripNights + transferFor(vehicleId)
-  const netShown = (vehicleId: string) => isFlat && (!city || cityFare(vehicleId) != null)
+  const tripNet = (vehicleId: string, base: number) =>
+    isCustom ? (customPrice(vehicleId) ?? 0) : base * tripNights + transferFor(vehicleId)
+  const netShown = (vehicleId: string) =>
+    isCustom ? !contactOnly(vehicleId) : isFlat && (!city || cityFare(vehicleId) != null)
   const shownPrice = (vehicleId: string, base: number) =>
     isP2P ? (cityFare(vehicleId) ?? base) : netShown(vehicleId) ? tripNet(vehicleId, base) : base
   const lineAmount = (vehicleId: string, base: number, qty: number) => {
@@ -174,7 +188,9 @@ export default function TransportDetail() {
     return base * qty * Math.max(1, days.size) + addonFare(vehicleId, qty)
   }
 
-  const picked = vehicleOptions.filter((o) => (qtys[o.vehicle._id] ?? 0) > 0)
+  const picked = vehicleOptions.filter((o) => (qtys[o.vehicle._id] ?? 0) > 0 && !contactOnly(o.vehicle._id))
+  // Custom full trip where no car has a fixed price for this stay length: the whole offering is contact-only.
+  const allContact = isCustom && vehicleOptions.every((o) => !customFromPrice(offering as ApiTransportOffering, o.vehicle._id, stayNights))
   const total = picked.reduce((sum, o) => sum + lineAmount(o.vehicle._id, o.price, qtys[o.vehicle._id]), 0)
   const detailsPrice = isP2P ? total : picked.reduce((sum, o) => sum + addonFare(o.vehicle._id, qtys[o.vehicle._id]), 0)
 
@@ -341,11 +357,18 @@ export default function TransportDetail() {
               {vehicleOptions.length === 0 && (
                 <p className="tr-status">No cars are priced for this service yet.</p>
               )}
+              {allContact && vehicleOptions.length > 0 && (
+                <p className="tr-status">
+                  No fixed price for your stay length ({stayDaysNights(stayNights)}).{' '}
+                  <button style={linkBtn} onClick={() => navigate('requests')}>Contact the property</button>
+                </p>
+              )}
               <div className="tr-cars">
-                {vehicleOptions.map(({ vehicle, price }) => {
+                {(allContact ? [] : vehicleOptions).map(({ vehicle, price }) => {
                   const qty = qtys[vehicle._id] ?? 0
                   const selected = qty > 0
                   const na = notFromHere(vehicle._id)
+                  const contact = contactOnly(vehicle._id)
                   return (
                     <article className={`tr-car ${selected ? 'tr-car--selected' : ''} ${na ? 'tr-car--na' : ''}`} key={vehicle._id}>
                       <button className="tr-car__media" onClick={() => setQty(vehicle._id, selected ? 0 : 1)}>
@@ -360,6 +383,9 @@ export default function TransportDetail() {
                           </span>
                           <span className="tr-car__name">
                             {vehicle.type || vehicle.name}
+                            {contact ? (
+                              <> - <span className="tr-car__per">Contact the property</span></>
+                            ) : (
                             <>
                               - {formatPrice(shownPrice(vehicle._id, price))}{' '}
                               {netShown(vehicle._id) ? (
@@ -368,9 +394,17 @@ export default function TransportDetail() {
                                 perLabel && !(isP2P && city && cityFare(vehicle._id) != null) && <span className="tr-car__per">{perLabel}</span>
                               )}
                             </>
+                            )}
                           </span>
                         </button>
-                        {na && <p className="tr-car__sub">Not available from {city}</p>}
+                        {contact ? (
+                          <p className="tr-car__sub">
+                            No fixed price for {stayDaysNights(stayNights)}{city ? ` from ${city}` : ''}.{' '}
+                            <button style={linkBtn} onClick={() => navigate('requests')}>Contact the property</button>
+                          </p>
+                        ) : (
+                          na && <p className="tr-car__sub">Not available from {city}</p>
+                        )}
                         <p className="tr-car__sub">
                           {vehicle.name}
                           {vehicle.capacity && (

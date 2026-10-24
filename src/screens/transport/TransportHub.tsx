@@ -7,7 +7,7 @@ import { useBookingGate } from '../../guest/BookingGate'
 import { useFetch } from '../../api/useFetch'
 import { getGuestTransport } from '../../api/endpoints'
 import type { ApiTransportOffering, ApiVehicle } from '../../api/types'
-import { priceSuffix, vehicleRows } from './rows'
+import { isCustomFullTrip, priceSuffix, vehicleRows } from './rows'
 import { formatPrice } from '../../api/format'
 import icBack from '../../assets/nav/ic-back.svg'
 import './TransportHub.css'
@@ -58,9 +58,10 @@ export default function TransportHub() {
     return fares.length ? Math.min(...fares) : 0
   }
   const rows = (o: ApiTransportOffering) =>
-    vehicleRows(o, vehicles, sightseeing, pickup)
+    vehicleRows(o, vehicles, sightseeing, pickup, tripNights)
+      .filter((r) => !isCustomFullTrip(o) || r.price > 0) // custom: only cars with a fixed price for this stay
       .slice(0, 2)
-      .map((r) => (o.flatRate ? { ...r, price: r.price * tripNights + lowestTransfer(r.vehicle._id) } : r))
+      .map((r) => (o.flatRate && !isCustomFullTrip(o) ? { ...r, price: r.price * tripNights + lowestTransfer(r.vehicle._id) } : r))
 
   // An offering sold as an add-on to this one (e.g. pickup/drop with the sightseeing cab).
   const hasAddon = (o: ApiTransportOffering) =>
