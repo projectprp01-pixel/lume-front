@@ -308,7 +308,7 @@ export default function Home() {
             <div className="hero__text">
               <h1 className="font-display">Welcome {stay.guestName}!</h1>
               <button className="hero__link" type="button" onClick={() => navigate('about')}>
-                Click here to learn more about the property →
+                About {property?.propertyName || 'Evolve Back, Coorg'} →
               </button>
             </div>
           </div>
