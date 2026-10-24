@@ -279,7 +279,7 @@ export default function Requests() {
 
             {view === 'chat' ? (
               <>
-                {(
+                {categories.length > 0 && (
                   <section className="requests-cats">
                     <h2 className="font-display requests-cats__title">Click to see prices</h2>
                     <div className="requests-cats__grid">
@@ -397,7 +397,7 @@ export default function Requests() {
               )}
             </div>
 
-            {(
+            {categories.length > 0 && (
               <section className="requests-cats">
                 <h2 className="font-display requests-cats__title">Click to see prices</h2>
                 <div className="requests-cats__grid">
