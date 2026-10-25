@@ -19,7 +19,7 @@ export default function DiningMenus() {
     <PageShell>
       <main className="ird ird--menus">
         <div className="ird-head">
-          <ScreenTitle title="Menus" back="inroom-dining" />
+          <ScreenTitle title="Menus" back="dining" />
         </div>
 
         {loading && !menu && <p className="ird-status">Loading the menus…</p>}

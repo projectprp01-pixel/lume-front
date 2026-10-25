@@ -400,7 +400,10 @@ export type ApiFbDish = {
   serves?: string
   tags?: string[]
   imageUrl?: string
+  extras?: ApiFbExtra[] // paid add-ons offered in the "Customise" popup
 }
+
+export type ApiFbExtra = { name: string; note?: string; price: number }
 
 export type ApiFbSubcategory = { _id: string; name: string; dishes: ApiFbDish[] }
 

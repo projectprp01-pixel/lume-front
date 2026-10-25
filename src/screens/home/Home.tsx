@@ -310,7 +310,7 @@ export default function Home() {
                 : a.label === 'Facilities'
                   ? 'facilities'
                   : a.label === 'In-room Dining'
-                    ? 'inroom-dining'
+                    ? 'dining-menus'
                     : null
             const sheet: SheetKind | null =
               a.label === 'WiFi Details'

@@ -154,7 +154,7 @@ export function createInRoomOrder(input: {
   guestId: string
   room?: string
   notes?: string
-  items: { dishId: string; qty: number }[]
+  items: { dishId: string; qty: number; extras?: string[] }[]
 }) {
   return apiFetch<ApiFbOrder>('/guests/in-room-dining/orders', {
     method: 'POST',

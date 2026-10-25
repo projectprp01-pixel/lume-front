@@ -156,7 +156,7 @@ export default function Dining() {
               {hero.subtext && <p className="dining-hero__eyebrow">{hero.subtext}</p>}
             </div>
             {hero.canOrder && (
-              <button className="dining-hero__cta" onClick={() => navigate('inroom-dining')}>
+              <button className="dining-hero__cta" onClick={() => navigate('dining-menus')}>
                 {hero.cta}
               </button>
             )}

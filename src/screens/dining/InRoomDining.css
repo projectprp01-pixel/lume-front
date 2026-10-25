@@ -20,15 +20,28 @@
 .ird-meta {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   margin-top: -6px;
   font-size: var(--body-size);
   line-height: 20px;
   color: var(--text-secondary);
 }
+.ird-meta__hours {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
 .ird-meta img {
   width: 18px;
   height: 18px;
+}
+/* 5px dot between the hours and the prep estimate (Figma 3132:22874) */
+.ird-meta__dot {
+  flex: none;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
 }
 .ird-notice {
   display: flex;
@@ -325,13 +338,65 @@
 }
 
 @media (min-width: 1024px) {
+  /* Laptop frames (Figma 3132:22803 / 3132:22598): a 1139px content column (+16px gutters). */
   .ird {
     width: 100%;
-    max-width: 720px;
+    max-width: 1171px;
     margin-inline: auto;
   }
   .ird-bar {
     padding-bottom: 16px;
+  }
+
+  /* Tab underline only runs under the tabs, starting at the content edge */
+  .ird-tabs {
+    width: fit-content;
+    max-width: 100%;
+    margin-left: var(--space-4);
+    padding-left: 0;
+  }
+
+  /* Dishes flow into two columns of 470px with a vertical divider between them */
+  .ird-dishes {
+    display: block;
+    column-count: 2;
+    column-gap: 199px;
+    column-rule: 1px solid var(--border-default);
+  }
+  .ird-dish {
+    gap: 20px;
+    margin-bottom: 20px;
+    break-inside: avoid;
+  }
+  .ird-dish__img {
+    width: 119px;
+    height: 117px;
+  }
+
+  /* Bottom bar: total stacked on the left, both buttons on the right (Figma 3132:23234) */
+  .ird-bar--menu {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px 56px;
+  }
+  .ird-bar--menu .ird-bar__total {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+  }
+  .ird-bar--menu .ird-bar__total > span,
+  .ird-bar--menu .ird-bar__total > span strong,
+  .ird-bar--menu .ird-bar__total > span small {
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 400;
+  }
+  .ird-bar--menu .ird-bar__actions {
+    width: 368px;
+    gap: 12px;
   }
 }
 
@@ -372,11 +437,22 @@
   font-weight: 500;
   color: var(--text-primary);
 }
+@media (min-width: 1024px) {
+  .ird-menugrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .ird-menutile__img {
+    aspect-ratio: auto;
+    height: 170px;
+    border-radius: 4.46px;
+  }
+}
 .ird-menutile__hours {
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-top: -6px;
+  margin-top: -4px;
   font-size: var(--body-size);
   line-height: 20px;
   color: var(--text-secondary);

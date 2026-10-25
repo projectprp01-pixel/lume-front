@@ -4,9 +4,10 @@ import ScreenTitle from '../../components/ScreenTitle'
 import { useNav } from '../../navigation/NavContext'
 import { useFetch } from '../../api/useFetch'
 import { getInRoomMenu } from '../../api/endpoints'
-import type { ApiFbCategory, ApiFbDish, ApiInRoomMenu } from '../../api/types'
+import type { ApiFbCategory, ApiFbDish, ApiFbSubcategory, ApiInRoomMenu } from '../../api/types'
 import { formatClock, formatRupees } from '../../api/format'
 import { useCart } from './CartContext'
+import CustomiseSheet from './CustomiseSheet'
 import icClock from '../../assets/dining/ic-clock.svg'
 import icWarnClock from '../../assets/inroom/ic-clock-warn.svg'
 import icOpenFull from '../../assets/inroom/ic-open-full.svg'
@@ -14,29 +15,47 @@ import dietVeg from '../../assets/inroom/diet-veg.svg'
 import dietNonVeg from '../../assets/inroom/diet-nonveg.svg'
 import './InRoomDining.css'
 
-// In-room dining menu (Figma "In-room Dining" 1020:3601, closed variant 2038:18133).
-// Reads the kitchen state + menu from GET /guests/in-room-dining/menu, lets the guest
-// build a cart, and hands off to the cart screen to place the order.
+// In-room dining menu (Figma "In-room Dining" 1020:3601 / laptop 3132:22803, closed variant 2038:18133).
+// Reads the kitchen state + menu from GET /guests/in-room-dining/menu, lets the guest build a cart, and
+// hands off to the cart screen to place the order.
+//
+// Entered from the Menus grid with a category: "In-room Dining: Lunch", that category's hours and prep
+// time, and tabs for its subcategories. Without a category (a stale link) it falls back to one list of
+// every category with a tab per category.
 
 const hhmmToMinutes = (t?: string) => {
   const [h, m] = (t ?? '').split(':').map(Number)
   return Number.isNaN(h) ? null : h * 60 + (m || 0)
 }
 
+const nowMinutes = () => {
+  const now = new Date()
+  return now.getHours() * 60 + now.getMinutes()
+}
+
+function isOpenNow(c: ApiFbCategory): boolean {
+  const a = hhmmToMinutes(c.openTime)
+  const b = hhmmToMinutes(c.closeTime)
+  if (a == null || b == null) return false
+  const mins = nowMinutes()
+  return a <= b ? mins >= a && mins < b : mins >= a || mins < b
+}
+
+// Minutes until the category stops serving, or null when it isn't serving right now.
+function minutesLeft(c: ApiFbCategory): number | null {
+  if (!isOpenNow(c)) return null
+  const close = hhmmToMinutes(c.closeTime) as number
+  const mins = nowMinutes()
+  return close > mins ? close - mins : close + 24 * 60 - mins
+}
+
 // The single category open right now ("Lunch"), used for the "In-room Dining: Lunch" title.
 function currentMeal(categories: ApiFbCategory[]): ApiFbCategory | null {
-  const now = new Date()
-  const mins = now.getHours() * 60 + now.getMinutes()
-  const open = categories.filter((c) => {
-    const a = hhmmToMinutes(c.openTime)
-    const b = hhmmToMinutes(c.closeTime)
-    if (a == null || b == null) return false
-    return a <= b ? mins >= a && mins < b : mins >= a || mins < b
-  })
+  const open = categories.filter(isOpenNow)
   return open.length === 1 ? open[0] : null
 }
 
-function kitchenNotice(kitchen: ApiInRoomMenu['kitchen']): { title: string; sub?: string } | null {
+function kitchenNotice(kitchen: ApiInRoomMenu['kitchen'], categoryLeft: number | null): { title: string; sub?: string } | null {
   if (!kitchen.open) {
     return {
       title: 'Kitchen Closed Temporarily',
@@ -46,9 +65,9 @@ function kitchenNotice(kitchen: ApiInRoomMenu['kitchen']): { title: string; sub?
           : 'Sorry! We are currently facing difficulties but will be back soon',
     }
   }
-  if (kitchen.closesInMinutes != null && kitchen.closesInMinutes <= 60) {
-    return { title: `Kitchen closes in ${kitchen.closesInMinutes}min` }
-  }
+  // The countdown is to whichever closes first: the kitchen, or the category being browsed.
+  const left = Math.min(kitchen.closesInMinutes ?? Infinity, categoryLeft ?? Infinity)
+  if (left <= 60) return { title: `Kitchen closes in ${left}min` }
   return null
 }
 
@@ -83,29 +102,81 @@ export default function InRoomDining() {
   const { param: startCategory, navigate } = useNav()
   const cart = useCart()
   const { data: menu, loading, error } = useFetch(() => getInRoomMenu(), [])
-  const [tab, setTab] = useState<string>(startCategory || 'all')
+  const [tab, setTab] = useState<string>('all')
+  const [customising, setCustomising] = useState<ApiFbDish | null>(null)
 
   const kitchen = menu?.kitchen
   const categories = useMemo(() => menu?.categories ?? [], [menu])
-  const visible = tab === 'all' ? categories : categories.filter((c) => c._id === tab)
+  // The category the guest picked on the Menus grid (undefined → the combined fallback list).
+  const category = useMemo(() => categories.find((c) => c._id === startCategory), [categories, startCategory])
   const meal = useMemo(() => currentMeal(categories), [categories])
-  // Prep estimate for the category being browsed, else for the meal that is open right now.
-  const prepTime = (tab === 'all' ? meal : categories.find((c) => c._id === tab))?.prepTime?.trim()
-  const notice = kitchen ? kitchenNotice(kitchen) : null
   const canOrder = !!kitchen?.open
 
+  const tabs: { _id: string; name: string }[] = category
+    ? [{ _id: 'all', name: 'All' }, ...category.subcategories]
+    : [{ _id: 'all', name: 'All' }, ...categories]
+
+  const activeCat = category ?? (tab === 'all' ? meal : categories.find((c) => c._id === tab))
+  const prepTime = activeCat?.prepTime?.trim()
+  const notice = kitchen ? kitchenNotice(kitchen, activeCat ? minutesLeft(activeCat) : null) : null
+  const title = category ? `In-room Dining: ${category.name}` : meal ? `In-room Dining: ${meal.name}` : 'In-room Dining'
+  const hours = category?.openTime && category?.closeTime
+    ? `${formatClock(category.openTime)} - ${formatClock(category.closeTime)}`
+    : kitchen
+      ? `${formatClock(kitchen.opens)} - ${formatClock(kitchen.closes)}`
+      : ''
+
   const total = cart.subtotal + cart.gst + (cart.count > 0 ? (kitchen?.packagingCharge ?? 0) : 0)
+
+  const addDish = (d: ApiFbDish) => (d.extras?.length ? setCustomising(d) : cart.add(d))
+
+  const renderDishes = (sub: ApiFbSubcategory) => (
+    <ul className="ird-dishes">
+      {sub.dishes.map((d) => (
+        <li className="ird-dish" key={d._id}>
+          <div className="ird-dish__img">{d.imageUrl && <img src={d.imageUrl} alt="" loading="lazy" />}</div>
+          <div className="ird-dish__main">
+            <div className="ird-dish__text">
+              <p className="ird-dish__name">
+                <DietSign type={d.dietType} />
+                <span>{d.name}</span>
+              </p>
+              {d.description && <p className="ird-dish__desc">{d.description}</p>}
+            </div>
+            <div className="ird-dish__foot">
+              <span className="ird-dish__price">{formatRupees(d.price)}</span>
+              {canOrder && <Stepper qty={cart.qtyOf(d._id)} onAdd={() => addDish(d)} onRemove={() => cart.remove(d._id)} />}
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  )
+
+  const avail = (c: ApiFbCategory) =>
+    c.openTime && c.closeTime ? (
+      <p className="ird-section__avail">
+        Available {formatClock(c.openTime)} - {formatClock(c.closeTime)}
+      </p>
+    ) : null
 
   return (
     <PageShell>
       <main className="ird">
         <div className="ird-head">
-          <ScreenTitle title={meal ? `In-room Dining: ${meal.name}` : 'In-room Dining'} back="dining" />
-          {kitchen && (
+          <ScreenTitle title={title} back={category ? 'dining-menus' : 'dining'} />
+          {hours && (
             <p className="ird-meta">
-              <img src={icClock} alt="" />
-              {formatClock(kitchen.opens)} - {formatClock(kitchen.closes)}
-              {prepTime && <span className="ird-meta__prep"> • {prepTime}</span>}
+              <span className="ird-meta__hours">
+                <img src={icClock} alt="" />
+                {hours}
+              </span>
+              {prepTime && (
+                <>
+                  <span className="ird-meta__dot" aria-hidden="true" />
+                  <span>{prepTime}</span>
+                </>
+              )}
             </p>
           )}
 
@@ -135,73 +206,53 @@ export default function InRoomDining() {
 
         {categories.length > 0 && (
           <>
-            <div className="ird-tabs" role="tablist">
-              {[{ _id: 'all', name: 'All' }, ...categories].map((c) => (
-                <button
-                  key={c._id}
-                  role="tab"
-                  aria-selected={tab === c._id}
-                  className={`ird-tab ${tab === c._id ? 'ird-tab--on' : ''}`}
-                  onClick={() => setTab(c._id)}
-                >
-                  {c.name}
-                </button>
-              ))}
-            </div>
+            {tabs.length > 1 && (
+              <div className="ird-tabs" role="tablist">
+                {tabs.map((t) => (
+                  <button
+                    key={t._id}
+                    role="tab"
+                    aria-selected={tab === t._id}
+                    className={`ird-tab ${tab === t._id ? 'ird-tab--on' : ''}`}
+                    onClick={() => setTab(t._id)}
+                  >
+                    {t.name}
+                  </button>
+                ))}
+              </div>
+            )}
 
             <div className="ird-body">
-              {visible.map((cat) => (
-                <section className="ird-section" key={cat._id}>
-                  <div className="ird-section__head">
-                    <h2 className="font-display ird-section__title">{cat.name}</h2>
-                    {cat.openTime && cat.closeTime && (
-                      <p className="ird-section__avail">
-                        Available {formatClock(cat.openTime)} - {formatClock(cat.closeTime)}
-                      </p>
-                    )}
-                  </div>
-
-                  {cat.subcategories.map((sub) => (
-                    <div className="ird-sub" key={sub._id}>
-                      {cat.subcategories.length > 1 && <h3 className="ird-sub__title">{sub.name}</h3>}
-                      <ul className="ird-dishes">
-                        {sub.dishes.map((d) => (
-                          <li className="ird-dish" key={d._id}>
-                            <div className="ird-dish__img">
-                              {d.imageUrl && <img src={d.imageUrl} alt="" loading="lazy" />}
-                            </div>
-                            <div className="ird-dish__main">
-                              <div className="ird-dish__text">
-                                <p className="ird-dish__name">
-                                  <DietSign type={d.dietType} />
-                                  <span>{d.name}</span>
-                                </p>
-                                {d.description && <p className="ird-dish__desc">{d.description}</p>}
-                              </div>
-                              <div className="ird-dish__foot">
-                                <span className="ird-dish__price">{formatRupees(d.price)}</span>
-                                {canOrder && (
-                                  <Stepper
-                                    qty={cart.qtyOf(d._id)}
-                                    onAdd={() => cart.add(d)}
-                                    onRemove={() => cart.remove(d._id)}
-                                  />
-                                )}
-                              </div>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+              {category
+                ? (tab === 'all' ? category.subcategories : category.subcategories.filter((s) => s._id === tab)).map((sub) => (
+                    <section className="ird-section" key={sub._id}>
+                      <div className="ird-section__head">
+                        <h2 className="font-display ird-section__title">{sub.name}</h2>
+                        {avail(category)}
+                      </div>
+                      {renderDishes(sub)}
+                    </section>
+                  ))
+                : (tab === 'all' ? categories : categories.filter((c) => c._id === tab)).map((cat) => (
+                    <section className="ird-section" key={cat._id}>
+                      <div className="ird-section__head">
+                        <h2 className="font-display ird-section__title">{cat.name}</h2>
+                        {avail(cat)}
+                      </div>
+                      {cat.subcategories.map((sub) => (
+                        <div className="ird-sub" key={sub._id}>
+                          {cat.subcategories.length > 1 && <h3 className="ird-sub__title">{sub.name}</h3>}
+                          {renderDishes(sub)}
+                        </div>
+                      ))}
+                    </section>
                   ))}
-                </section>
-              ))}
             </div>
           </>
         )}
 
         {/* Bottom bar — total + cart/order */}
-        <footer className="ird-bar">
+        <footer className="ird-bar ird-bar--menu">
           <p className="ird-bar__total">
             <span>
               <strong>Total</strong> <small>(In-room dining)</small>
@@ -222,6 +273,17 @@ export default function InRoomDining() {
           </div>
         </footer>
       </main>
+
+      {customising && (
+        <CustomiseSheet
+          dish={customising}
+          onClose={() => setCustomising(null)}
+          onAdd={(extras) => {
+            cart.add(customising, extras)
+            setCustomising(null)
+          }}
+        />
+      )}
     </PageShell>
   )
 }

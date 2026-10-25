@@ -49,7 +49,7 @@ export default function InRoomCart() {
         guestId,
         room: roomValue,
         notes: notes.trim() || undefined,
-        items: cart.lines.map((l) => ({ dishId: l.dish._id, qty: l.qty })),
+        items: cart.lines.map((l) => ({ dishId: l.dish._id, qty: l.qty, extras: l.extras.map((e) => e.name) })),
       })
       setPlaced({ room: roomValue, total, items: cart.count })
       cart.clear()
@@ -82,21 +82,23 @@ export default function InRoomCart() {
     <PageShell>
       <main className="irc">
         <div className="irc-head">
-          <ScreenTitle title="Your Cart" back="inroom-dining" />
+          <ScreenTitle title="Your Cart" back="dining-menus" />
         </div>
 
         {cart.lines.length === 0 ? (
           <div className="irc-empty">
             <p>Your cart is empty.</p>
-            <button className="ird-btn ird-btn--outline" onClick={() => navigate('inroom-dining')}>
+            <button className="ird-btn ird-btn--outline" onClick={() => navigate('dining-menus')}>
               Browse the menu
             </button>
           </div>
         ) : (
           <div className="irc-body">
             <ul className="irc-lines">
-              {cart.lines.map(({ dish, qty }) => (
-                <li className="irc-line" key={dish._id}>
+              {cart.lines.map((line) => {
+                const { dish, qty, extras } = line
+                return (
+                <li className="irc-line" key={line.key}>
                   <div className="irc-line__img">{dish.imageUrl && <img src={dish.imageUrl} alt="" />}</div>
                   <div className="irc-line__main">
                     <div className="irc-line__text">
@@ -110,14 +112,16 @@ export default function InRoomCart() {
                       <p className="irc-line__sub">
                         {[dish.dietType, dish.serves ? `Serves ${dish.serves}` : ''].filter(Boolean).join(' • ')}
                       </p>
+                      {extras.length > 0 && <p className="irc-line__sub">+ {extras.map((e) => e.name).join(', ')}</p>}
                     </div>
                     <div className="irc-line__foot">
-                      <span className="irc-line__price">{formatRupees(dish.price * qty)}</span>
-                      <Stepper qty={qty} onAdd={() => cart.add(dish)} onRemove={() => cart.remove(dish._id)} />
+                      <span className="irc-line__price">{formatRupees(cart.unitPrice(line) * qty)}</span>
+                      <Stepper qty={qty} onAdd={() => cart.bump(line.key, 1)} onRemove={() => cart.bump(line.key, -1)} />
                     </div>
                   </div>
                 </li>
-              ))}
+                )
+              })}
             </ul>
 
             <section className="irc-field">
@@ -151,13 +155,14 @@ export default function InRoomCart() {
               <h2 className="font-display irc-field__title">Order Summary</h2>
               <div className="irc-summary">
                 <ul>
-                  {cart.lines.map(({ dish, qty }) => (
-                    <li key={dish._id}>
+                  {cart.lines.map((line) => (
+                    <li key={line.key}>
                       <span>
-                        {dish.name}
-                        {qty > 1 ? ` × ${qty}` : ''}
+                        {line.dish.name}
+                        {line.extras.length > 0 ? ` (+ ${line.extras.map((e) => e.name).join(', ')})` : ''}
+                        {line.qty > 1 ? ` × ${line.qty}` : ''}
                       </span>
-                      <span>{formatRupees(dish.price * qty)}</span>
+                      <span>{formatRupees(cart.unitPrice(line) * line.qty)}</span>
                     </li>
                   ))}
                   {cart.gst > 0 && (

@@ -10,7 +10,8 @@ import type {
 } from '../api/types'
 import { useGuest } from './GuestContext'
 import { stayPhase } from './stayPhase'
-import { isCheckedIn, useNow } from './stayTimes'
+import { isCheckedIn, isCheckedOut, useNow } from './stayTimes'
+import { useCheckInSummary } from './checkInStatus'
 import { SplashLogo } from '../screens/prestay/Splash'
 
 // Live view of the dashboard's Guest App builder + property settings + discounts. Everything in
@@ -57,20 +58,20 @@ export function AppConfigProvider({ children }: { children: ReactNode }) {
 
   const stage: GuestStage = stayPhase(booking?.arrivalDate, booking?.checkoutDate) === 'pre' ? 'prestay' : 'instay'
 
-  // In-room ordering is an in-stay layer: it only appears from the property's check-in time on the arrival
-  // day (not from midnight) until checkout. A guest with no arrival date on file is not gated.
+  // In-room ordering is an in-stay layer: it appears from the property's check-in time on the arrival day
+  // (not from midnight) until checkout. It unlocks earlier, from the start of the arrival day, once every
+  // guest's ID has been approved in online check-in. A guest with no arrival date on file is not gated.
   const now = useNow()
-  const checkedIn =
-    !booking?.arrivalDate ||
-    isCheckedIn(
-      {
-        arrivalDate: booking.arrivalDate,
-        checkoutDate: booking.checkoutDate,
-        checkInTime: settings?.checkInTime,
-        checkOutTime: settings?.checkOutTime,
-      },
-      now,
-    )
+  const checkIn = useCheckInSummary()
+  const stayTimes = {
+    arrivalDate: booking?.arrivalDate,
+    checkoutDate: booking?.checkoutDate,
+    checkInTime: settings?.checkInTime,
+    checkOutTime: settings?.checkOutTime,
+  }
+  const approvedEarly =
+    checkIn.allDone && stayPhase(booking?.arrivalDate, booking?.checkoutDate) === 'in' && !isCheckedOut(stayTimes, now)
+  const checkedIn = !booking?.arrivalDate || isCheckedIn(stayTimes, now) || approvedEarly
 
   const value = useMemo<ConfigValue>(() => {
     const g: ApiGuestApp = settings?.guestApp ?? {}
