@@ -15,7 +15,7 @@ import PriceText from '../../components/PriceText'
 import { useFetch } from '../../api/useFetch'
 import { getRestaurants, getDiningAvailability } from '../../api/endpoints'
 import type { ApiRestaurant } from '../../api/types'
-import { formatDayMonth, formatPrice, formatTime12, withTaxNote } from '../../api/format'
+import { formatClock, formatDayMonth, formatPrice, formatTime12, withTaxNote } from '../../api/format'
 import icBack from '../../assets/nav/ic-back.svg'
 import lanterns from '../../assets/dining/lanterns.png'
 import './DiningDetail.css'
@@ -149,9 +149,14 @@ export default function DiningDetail() {
   // ("Breakfast, Lunch, Dinner" — as in the dashboard's preview; no times, the slot picker has those).
   const heroMeta = isIntimate
     ? (facility.mealTimes ?? []).map(cap).join(', ')
-    : [mealsLabel(facility), (facility.cuisine ?? []).join(', ') || facility.subtitle]
-        .filter(Boolean)
+    : [mealsLabel(facility), (facility.cuisine ?? []).join(', '), facility.subtitle]
+        .filter((part, i, all) => part && all.indexOf(part) === i)
         .join(' • ')
+  // Informational listings show their opening hours (set in the dashboard); bookable evenings use slots.
+  const openHours =
+    !isIntimate && facility.openTime && facility.closeTime
+      ? `${formatClock(facility.openTime)} - ${formatClock(facility.closeTime)}`
+      : ''
   const listPrice = facility.price ?? 0
   // Dining Hub promotion tagged to this facility (the server applies the same one when booking).
   const priced = discounted('dining', facility._id, listPrice)
@@ -265,6 +270,7 @@ export default function DiningDetail() {
           <div className="dd-hero__text">
             <h1 className="font-display dd-hero__title">{facility.name}</h1>
             {heroMeta && <p className="dd-hero__meta">{heroMeta}</p>}
+            {openHours && <p className="dd-hero__meta">{openHours}</p>}
           </div>
         </header>
 

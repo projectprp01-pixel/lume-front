@@ -10,6 +10,7 @@ import type {
 } from '../api/types'
 import { useGuest } from './GuestContext'
 import { stayPhase } from './stayPhase'
+import { isCheckedIn, useNow } from './stayTimes'
 import { SplashLogo } from '../screens/prestay/Splash'
 
 // Live view of the dashboard's Guest App builder + property settings + discounts. Everything in
@@ -56,6 +57,21 @@ export function AppConfigProvider({ children }: { children: ReactNode }) {
 
   const stage: GuestStage = stayPhase(booking?.arrivalDate, booking?.checkoutDate) === 'pre' ? 'prestay' : 'instay'
 
+  // In-room ordering is an in-stay layer: it only appears from the property's check-in time on the arrival
+  // day (not from midnight) until checkout. A guest with no arrival date on file is not gated.
+  const now = useNow()
+  const checkedIn =
+    !booking?.arrivalDate ||
+    isCheckedIn(
+      {
+        arrivalDate: booking.arrivalDate,
+        checkoutDate: booking.checkoutDate,
+        checkInTime: settings?.checkInTime,
+        checkOutTime: settings?.checkOutTime,
+      },
+      now,
+    )
+
   const value = useMemo<ConfigValue>(() => {
     const g: ApiGuestApp = settings?.guestApp ?? {}
     const configured = Object.keys(g).length > 0
@@ -78,11 +94,11 @@ export function AppConfigProvider({ children }: { children: ReactNode }) {
         gallery: on(g.homeToggles?.gallery),
       },
       quickActionOn: (key) => on(g.quickActions?.[stage]?.[key]),
-      inRoomOrderingEnabled: on(g.inRoomOrderingEnabled),
+      inRoomOrderingEnabled: on(g.inRoomOrderingEnabled) && checkedIn,
       showsInStage: (s) => !s || s === 'both' || s === stage,
       discounts: discounts ?? [],
     }
-  }, [settings, discounts, stage])
+  }, [settings, discounts, stage, checkedIn])
 
   // Hold the screen until the property's saved settings arrive, so guests never see the built-in
   // sample design flash before their property's own content (an error falls through to the defaults).

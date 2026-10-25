@@ -410,6 +410,7 @@ export type ApiFbCategory = {
   desc?: string
   openTime?: string // "07:00"
   closeTime?: string
+  prepTime?: string // "25-30 min" — estimated prep/delivery time, free text from the dashboard
   imageUrl?: string
   subcategories: ApiFbSubcategory[]
 }

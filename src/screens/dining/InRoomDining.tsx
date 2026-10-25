@@ -24,7 +24,7 @@ const hhmmToMinutes = (t?: string) => {
 }
 
 // The single category open right now ("Lunch"), used for the "In-room Dining: Lunch" title.
-function currentMeal(categories: ApiFbCategory[]): string | null {
+function currentMeal(categories: ApiFbCategory[]): ApiFbCategory | null {
   const now = new Date()
   const mins = now.getHours() * 60 + now.getMinutes()
   const open = categories.filter((c) => {
@@ -33,7 +33,7 @@ function currentMeal(categories: ApiFbCategory[]): string | null {
     if (a == null || b == null) return false
     return a <= b ? mins >= a && mins < b : mins >= a || mins < b
   })
-  return open.length === 1 ? open[0].name : null
+  return open.length === 1 ? open[0] : null
 }
 
 function kitchenNotice(kitchen: ApiInRoomMenu['kitchen']): { title: string; sub?: string } | null {
@@ -89,6 +89,8 @@ export default function InRoomDining() {
   const categories = useMemo(() => menu?.categories ?? [], [menu])
   const visible = tab === 'all' ? categories : categories.filter((c) => c._id === tab)
   const meal = useMemo(() => currentMeal(categories), [categories])
+  // Prep estimate for the category being browsed, else for the meal that is open right now.
+  const prepTime = (tab === 'all' ? meal : categories.find((c) => c._id === tab))?.prepTime?.trim()
   const notice = kitchen ? kitchenNotice(kitchen) : null
   const canOrder = !!kitchen?.open
 
@@ -98,11 +100,12 @@ export default function InRoomDining() {
     <PageShell>
       <main className="ird">
         <div className="ird-head">
-          <ScreenTitle title={meal ? `In-room Dining: ${meal}` : 'In-room Dining'} back="dining" />
+          <ScreenTitle title={meal ? `In-room Dining: ${meal.name}` : 'In-room Dining'} back="dining" />
           {kitchen && (
             <p className="ird-meta">
               <img src={icClock} alt="" />
               {formatClock(kitchen.opens)} - {formatClock(kitchen.closes)}
+              {prepTime && <span className="ird-meta__prep"> • {prepTime}</span>}
             </p>
           )}
 
