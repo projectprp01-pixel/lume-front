@@ -313,24 +313,24 @@
     font-size: 1.75rem;
   }
 
-  /* Outdoor — capped column, 2-up grid, no scroll */
+  /* Outdoor — capped column; the cards keep a fixed width and scroll sideways like every other tile row */
   .dining-section {
     max-width: 1139px;
     margin-inline: auto;
     width: 100%;
     padding-inline: var(--gutter);
   }
-  .dining-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+  .dining-section .dining-row {
     gap: var(--space-4);
-    overflow: visible;
   }
   .rest-card {
-    width: auto;
+    width: 336px;
   }
-  .rest-card__media {
-    aspect-ratio: 560 / 220;
+  /* Intimate — stays a 4-up grid */
+  .dining-row--dark {
+    display: grid;
+    gap: var(--space-4);
+    overflow: visible;
   }
 
   /* Intimate band — full-bleed, capped inner, 4-up grid */
