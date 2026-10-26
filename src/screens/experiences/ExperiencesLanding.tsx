@@ -146,7 +146,7 @@ export default function ExperiencesLanding() {
       description:
         r.facilityType === 'intimate_dining'
           ? (r.mealTimes ?? []).map((m) => m.charAt(0).toUpperCase() + m.slice(1)).join(', ')
-          : r.subtitle || (r.cuisine ?? []).join(', '),
+          : (r.cuisine ?? []).join(', ') || r.subtitle || '',
       price: r.price ? <PriceText priced={priced} unit={priceUnit(r.pricingLabel)} /> : 'View details',
       popular: false,
       free: false,

@@ -149,7 +149,7 @@ export default function DiningDetail() {
   // ("Breakfast, Lunch, Dinner" — as in the dashboard's preview; no times, the slot picker has those).
   const heroMeta = isIntimate
     ? (facility.mealTimes ?? []).map(cap).join(', ')
-    : [mealsLabel(facility), facility.subtitle || (facility.cuisine ?? []).join(', ')]
+    : [mealsLabel(facility), (facility.cuisine ?? []).join(', ') || facility.subtitle]
         .filter(Boolean)
         .join(' • ')
   const listPrice = facility.price ?? 0
