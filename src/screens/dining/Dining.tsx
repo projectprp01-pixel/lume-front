@@ -115,7 +115,8 @@ export default function Dining() {
   // Hero: the in-room ordering banner during the stay (when the property has ordering switched on),
   // otherwise the pre-stay "Dining at ..." header. Without a saved builder document: the original banner.
   const heroCfg = cfg.guestApp.diningHero
-  const showInRoom = !cfg.configured || (cfg.stage === 'instay' && cfg.inRoomOrderingEnabled)
+  // inRoomOrderingEnabled is already false until the guest is checked in, so Order Now never shows before then.
+  const showInRoom = cfg.stage === 'instay' && cfg.inRoomOrderingEnabled
   const hero = showInRoom
     ? {
         image: heroCfg?.instay?.image || inRoom.image,
