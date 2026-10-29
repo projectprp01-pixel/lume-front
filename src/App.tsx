@@ -137,7 +137,7 @@ function AppGate() {
   const phase = stayPhase(booking?.arrivalDate, booking?.checkoutDate)
   if (phase === 'post') return <CheckedOut />
 
-  // Every launch (no deep link) opens on the splash, which continues to Home (check-in is reached from the Home banner).
+  // Every launch (no deep link) opens on the splash: pre-stay continues to check-in, in-stay to Home.
   const defaultScreen = 'splash'
 
   return (
