@@ -8,8 +8,6 @@ import './Feedback.css'
 
 type Props = {
   config: ApiFeedbackConfig
-  /** "Maybe Later": leave without rating, for now. */
-  onLater: () => void
   /** The rating is saved and there is nowhere to send the guest — carry on to the checked-out message. */
   onDone: () => void
 }
@@ -33,7 +31,7 @@ function safeUrl(raw: string | undefined): string | null {
  * it the rating is saved the moment they lift their finger and they are sent to the review site the
  * property has switched on.
  */
-export default function Feedback({ config, onLater, onDone }: Props) {
+export default function Feedback({ config, onDone }: Props) {
   const { guest, booking } = useGuest()
   // What the stars show right now (follows the finger) vs. the rating the guest last settled on.
   const [value, setValue] = useState(0)
@@ -149,11 +147,6 @@ export default function Feedback({ config, onLater, onDone }: Props) {
         )}
       </div>
 
-      {phase !== 'redirecting' && (
-        <button type="button" className="feedback__later" disabled={busy} onClick={onLater}>
-          Maybe Later
-        </button>
-      )}
     </main>
   )
 }

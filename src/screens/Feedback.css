@@ -142,18 +142,3 @@
   font-family: var(--font-body);
   font-size: var(--body-size);
 }
-
-.feedback__later {
-  margin-top: var(--space-5);
-  padding: var(--space-3) var(--space-5);
-  border: 0;
-  background: none;
-  font-family: var(--font-body);
-  font-size: var(--body-size);
-  color: var(--text-primary);
-  cursor: pointer;
-}
-.feedback__later:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
