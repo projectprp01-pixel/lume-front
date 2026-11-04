@@ -10,7 +10,7 @@ import { useNav } from '../../navigation/NavContext'
 import { useGuest } from '../../guest/GuestContext'
 import { useTripCart, type NewCartItem } from '../../cart/TripCart'
 import { useAppConfig, useDiscounted } from '../../guest/AppConfig'
-import { slotAfterCheckout, slotBeforeCheckin } from '../../guest/stayTimes'
+import { checkOutTimeFor, slotAfterCheckout, slotBeforeCheckin } from '../../guest/stayTimes'
 import PriceText from '../../components/PriceText'
 import { useFetch } from '../../api/useFetch'
 import { getRestaurants, getDiningAvailability } from '../../api/endpoints'
@@ -174,7 +174,7 @@ export default function DiningDetail() {
     arrivalDate: booking?.arrivalDate,
     checkoutDate: booking?.checkoutDate,
     checkInTime: propertySettings?.checkInTime,
-    checkOutTime: propertySettings?.checkOutTime,
+    checkOutTime: checkOutTimeFor(booking, propertySettings?.checkOutTime),
   }
   const slots = (facility.slots ?? []).filter(
     (s) =>

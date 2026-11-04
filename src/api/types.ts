@@ -90,6 +90,8 @@ export type ApiBooking = {
   roomType?: string | null
   roomNumber?: string | null
   checkInStatus?: string
+  // "HH:MM": a late checkout staff approved for this stay; replaces the property's standard time.
+  checkOutTimeOverride?: string | null
 }
 
 // Returned by GET /api/checkin/booking/:token

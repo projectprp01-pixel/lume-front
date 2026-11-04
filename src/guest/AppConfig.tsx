@@ -10,7 +10,7 @@ import type {
 } from '../api/types'
 import { useGuest } from './GuestContext'
 import { stayPhase } from './stayPhase'
-import { isCheckedIn, isCheckedOut, useNow } from './stayTimes'
+import { checkOutTimeFor, isCheckedIn, isCheckedOut, useNow } from './stayTimes'
 import { useCheckInSummary } from './checkInStatus'
 import { SplashLogo } from '../screens/prestay/Splash'
 
@@ -67,7 +67,7 @@ export function AppConfigProvider({ children }: { children: ReactNode }) {
     arrivalDate: booking?.arrivalDate,
     checkoutDate: booking?.checkoutDate,
     checkInTime: settings?.checkInTime,
-    checkOutTime: settings?.checkOutTime,
+    checkOutTime: checkOutTimeFor(booking, settings?.checkOutTime),
   }
   const approvedEarly =
     checkIn.allDone && stayPhase(booking?.arrivalDate, booking?.checkoutDate) === 'in' && !isCheckedOut(stayTimes, now)

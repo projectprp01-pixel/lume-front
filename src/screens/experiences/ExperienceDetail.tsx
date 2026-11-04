@@ -3,7 +3,7 @@ import { useNav } from '../../navigation/NavContext'
 import { useGuest } from '../../guest/GuestContext'
 import { useTripCart, type NewCartItem } from '../../cart/TripCart'
 import { useAppConfig, useDiscounted } from '../../guest/AppConfig'
-import { slotAfterCheckout, slotBeforeCheckin } from '../../guest/stayTimes'
+import { checkOutTimeFor, slotAfterCheckout, slotBeforeCheckin } from '../../guest/stayTimes'
 import PriceText from '../../components/PriceText'
 import BookBar from '../../components/BookBar'
 import PageShell from '../../components/PageShell'
@@ -233,7 +233,7 @@ export default function ExperienceDetail() {
     arrivalDate: booking?.arrivalDate,
     checkoutDate: booking?.checkoutDate,
     checkInTime: propertySettings?.checkInTime,
-    checkOutTime: propertySettings?.checkOutTime,
+    checkOutTime: checkOutTimeFor(booking, propertySettings?.checkOutTime),
   }
   const slotList = allSlotList.filter(
     (s) => !slotAfterCheckout(stayTimes, dayIso, s.time, experienceMinutes(exp)) && !slotBeforeCheckin(stayTimes, dayIso, s.time),

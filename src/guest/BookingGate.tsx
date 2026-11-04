@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useGuest } from './GuestContext'
 import { useAppConfig } from './AppConfig'
-import { isCheckedIn, useNow } from './stayTimes'
+import { checkOutTimeFor, isCheckedIn, useNow } from './stayTimes'
 import icClose from '../assets/requests/ic-close.svg'
 import './BookingGate.css'
 
@@ -24,7 +24,7 @@ export function BookingGateProvider({ children }: { children: ReactNode }) {
       arrivalDate: booking?.arrivalDate,
       checkoutDate: booking?.checkoutDate,
       checkInTime: settings?.checkInTime,
-      checkOutTime: settings?.checkOutTime,
+      checkOutTime: checkOutTimeFor(booking, settings?.checkOutTime),
     },
     now,
   )

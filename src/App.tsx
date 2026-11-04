@@ -31,7 +31,7 @@ import CheckIn from './screens/prestay/CheckIn'
 import InvalidPage from './screens/InvalidPage'
 import CheckedOut from './screens/CheckedOut'
 import { BookingGateProvider } from './guest/BookingGate'
-import { isCheckedOut, useNow } from './guest/stayTimes'
+import { checkOutTimeFor, isCheckedOut, useNow } from './guest/stayTimes'
 
 // Tabs the property can switch off from the dashboard (Guest App → page toggles). A switched-off
 // section's landing pages fall back to Home, so a stale link or open tab can't reach it.
@@ -106,7 +106,7 @@ function StayGate() {
   const { booking } = useGuest()
   const { settings } = useAppConfig()
   const now = useNow()
-  if (isCheckedOut({ checkoutDate: booking?.checkoutDate, checkOutTime: settings?.checkOutTime }, now)) return <CheckedOut />
+  if (isCheckedOut({ checkoutDate: booking?.checkoutDate, checkOutTime: checkOutTimeFor(booking, settings?.checkOutTime) }, now)) return <CheckedOut />
   return (
     <BookingGateProvider>
       <CurrentScreen />

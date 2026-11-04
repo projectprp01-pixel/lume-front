@@ -21,6 +21,14 @@ function at(date: string, hhmm: string | undefined, fallback: string): number {
   return d.getTime()
 }
 
+/** This stay's checkout time: a late checkout staff recorded for the guest, else the property's standard time. */
+export function checkOutTimeFor(
+  booking: { checkOutTimeOverride?: string | null } | null | undefined,
+  standard: string | undefined,
+): string | undefined {
+  return booking?.checkOutTimeOverride || standard
+}
+
 export type StayTimes = {
   arrivalDate?: string
   checkoutDate?: string

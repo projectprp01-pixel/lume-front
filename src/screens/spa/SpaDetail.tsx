@@ -13,7 +13,7 @@ import { formatDayMonth, formatMinutes, formatPrice, formatTime12, spaDuration, 
 import { buildDays } from '../experiences/ExperienceDetail'
 import PriceText from '../../components/PriceText'
 import { useAppConfig, useDiscounted } from '../../guest/AppConfig'
-import { slotAfterCheckout, slotBeforeCheckin } from '../../guest/stayTimes'
+import { checkOutTimeFor, slotAfterCheckout, slotBeforeCheckin } from '../../guest/stayTimes'
 import icBack from '../../assets/nav/ic-back.svg'
 import icClock from '../../assets/home/ic-clock.svg'
 import icDot from '../../assets/home/ic-dot.svg'
@@ -154,7 +154,7 @@ export default function SpaDetail() {
     arrivalDate: booking?.arrivalDate,
     checkoutDate: booking?.checkoutDate,
     checkInTime: propertySettings?.checkInTime,
-    checkOutTime: propertySettings?.checkOutTime,
+    checkOutTime: checkOutTimeFor(booking, propertySettings?.checkOutTime),
   }
   const slots = ownSlots.filter(
     (s) => !slotAfterCheckout(stayTimes, dayIso, s.time, minutes ?? 0) && !slotBeforeCheckin(stayTimes, dayIso, s.time),
