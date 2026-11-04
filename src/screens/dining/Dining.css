@@ -218,16 +218,16 @@
   gap: 12px;
 }
 
-/* Intimate (dark) cards: 340 wide, 244 media, #3f2929 body */
+/* Intimate (dark) cards: larger than the outdoor cards, #3f2929 body */
 .dine-card {
   flex: 0 0 auto;
-  width: min(340px, 87vw);
+  width: min(380px, 90vw);
   border-radius: var(--radius-sm);
   overflow: hidden;
   background: var(--surface-media-deep);
 }
 .dine-card__media {
-  aspect-ratio: 340 / 244;
+  aspect-ratio: 4 / 3;
 }
 .dine-card__media img {
   width: 100%;
@@ -326,11 +326,9 @@
   .rest-card {
     width: 336px;
   }
-  /* Intimate — stays a 4-up grid */
+  /* Intimate — one lateral-scroll row of large tiles (never wraps onto a second row) */
   .dining-row--dark {
-    display: grid;
     gap: var(--space-4);
-    overflow: visible;
   }
 
   /* Intimate band — full-bleed, capped inner, 4-up grid */
@@ -342,11 +340,11 @@
     margin-inline: auto;
     padding-inline: var(--gutter);
   }
-  .dining-row--dark {
-    grid-template-columns: repeat(4, 1fr);
-  }
   .dine-card {
-    width: auto;
+    width: 460px;
+  }
+  .dine-card__body {
+    padding: 16px 24px;
   }
 }
 
