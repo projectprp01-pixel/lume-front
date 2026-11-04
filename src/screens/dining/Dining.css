@@ -342,11 +342,13 @@
     margin-inline: auto;
     padding-inline: var(--gutter);
   }
+  /* Intimate — one lateral-scroll row (never wraps onto a second row) */
   .dining-row--dark {
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    overflow-x: auto;
   }
   .dine-card {
-    width: auto;
+    width: 340px; /* Figma 3132:20458 */
   }
 }
 
