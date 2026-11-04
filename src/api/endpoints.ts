@@ -11,6 +11,8 @@ import type {
   ApiInRoomMenu,
   ApiExperience,
   ApiExperienceBooking,
+  ApiFeedbackConfig,
+  ApiFeedbackResult,
   ApiGuest,
   ApiNotification,
   ApiRestaurant,
@@ -176,6 +178,16 @@ export function getDiscounts(guestId?: string | null) {
 
 export function getGuestRequests(guestId: string) {
   return apiFetch<ApiServiceRequest[]>(`/guests/requests?guestId=${guestId}`)
+}
+
+// Post-checkout rating screen: the property's threshold, question and review site for this stay.
+export function getFeedbackConfig(bookingId: string) {
+  return apiFetch<ApiFeedbackConfig>(`/guests/feedback/config?bookingId=${encodeURIComponent(bookingId)}`)
+}
+
+// Rating is in half-star steps (0.5 to 5). `response` is only kept by the server for a low rating.
+export function submitFeedback(input: { bookingId: string; rating: number; response?: string }) {
+  return apiFetch<ApiFeedbackResult>('/guests/feedback', { method: 'POST', body: JSON.stringify(input) })
 }
 
 export function createGuestRequest(guestId: string, content: string) {

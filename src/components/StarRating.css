@@ -1,0 +1,60 @@
+/* Five equal cells; each star is centred in its cell so the left half of the cell is the left half of the star. */
+.star-rating {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width: min(100%, 300px);
+  margin: 0 auto;
+  cursor: pointer;
+  /* The row owns horizontal and vertical drags — otherwise the browser scrolls and cancels the slide. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+.star-rating:focus-visible {
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 0 2px var(--accent-default);
+}
+.star-rating--disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+.star-rating__cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* A tall hit area: easy to land a thumb on, and the finger can wander up and down while sliding. */
+  height: 56px;
+}
+.star-rating__star {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+.star-rating__empty,
+.star-rating__filled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+}
+.star-rating__empty {
+  width: 100%;
+}
+.star-rating__empty svg {
+  fill: #d9d9d9;
+}
+/* Clipped to the filled fraction; the svg inside keeps its full width so the clip cuts the star, not squashes it. */
+.star-rating__filled {
+  overflow: hidden;
+}
+.star-rating__filled svg {
+  display: block;
+  flex: none;
+  fill: #d4a93a;
+}
+.star-rating__empty svg {
+  display: block;
+}

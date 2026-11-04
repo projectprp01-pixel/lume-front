@@ -439,3 +439,22 @@ export type ApiFbOrder = {
   packagingCharge?: number
   createdAt?: string
 }
+
+// GET /api/guests/feedback/config — what the post-checkout rating screen needs.
+export type ApiFeedbackConfig = {
+  // A rating at or below this (stars) gets the "what could we improve" box; above it the guest is
+  // sent to the review site.
+  lowMax: number
+  prompt: string
+  // The one review site the property has switched on, or null when none is.
+  reviewSite: { name: string; url: string } | null
+  // This stay already has a rating.
+  submitted: boolean
+}
+
+// POST /api/guests/feedback
+export type ApiFeedbackResult = {
+  created: boolean
+  low: boolean
+  reviewSite: { name: string; url: string } | null
+}
