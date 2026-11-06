@@ -485,7 +485,7 @@
     padding-inline: var(--space-5);
   }
   .dd .bk-bar {
-    margin-inline: 0;
+    margin-inline: auto; /* stay centred in the 720px column, like the content above it */
     padding-bottom: 16px;
     border-radius: var(--radius-sm) var(--radius-sm) 0 0;
   }
