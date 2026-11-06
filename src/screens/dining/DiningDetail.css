@@ -458,17 +458,31 @@
 
 /* ---------- Laptop: centred column, top bar in flow ---------- */
 @media (min-width: 1024px) {
+  /* The banner matches the Dining home and experience pages: inset by the page margin, flush under the
+     nav and rounded only at the bottom. The content below stays in a centred 720px column. */
   .dd {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-top: 0;
+    padding-inline: 0;
+  }
+  .dd > :not(.dd-hero) {
     width: 100%;
     max-width: 720px;
     margin-inline: auto;
-    padding-top: var(--space-5);
+    padding-inline: 12px;
   }
   .dd-hero {
-    margin-top: 0;
+    margin: 0 var(--page-pad);
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
   }
   .dd__back {
-    top: 19px;
+    top: var(--space-4);
+    left: var(--space-5);
+  }
+  .dd-hero__text {
+    padding-inline: var(--space-5);
   }
   .dd .bk-bar {
     margin-inline: 0;
